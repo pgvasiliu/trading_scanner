@@ -1,0 +1,6 @@
+$ ./get_market_exchange.py BMO PDS SLB XOM
+BMO:NYSE
+PDS:NYSE
+SLB:NYSE
+XOM:NYSE
+

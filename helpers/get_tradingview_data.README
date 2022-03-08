@@ -1,0 +1,41 @@
+$ python3 get_tradingview_data.py
+
+ RECOMMENDATION FOR AAPL : SELL 
+
+   DETAILS:  {'RECOMMENDATION': 'SELL', 'BUY': 3, 'SELL': 13, 'NEUTRAL': 10} 
+
+ DATE > 08, Mar 2022
+ TIME > 16:39:43
+
+Asset AAPL added to get_tradingview_data.txt 
+
+
+ RECOMMENDATION FOR OXY : BUY 
+
+   DETAILS:  {'RECOMMENDATION': 'BUY', 'BUY': 15, 'SELL': 4, 'NEUTRAL': 7} 
+
+ DATE > 08, Mar 2022
+ TIME > 16:39:44
+
+Asset OXY added to get_tradingview_data.txt 
+
+
+ RECOMMENDATION FOR WFC : SELL 
+
+   DETAILS:  {'RECOMMENDATION': 'SELL', 'BUY': 4, 'SELL': 14, 'NEUTRAL': 8} 
+
+ DATE > 08, Mar 2022
+ TIME > 16:39:45
+
+Asset WFC added to get_tradingview_data.txt 
+
+
+ RECOMMENDATION FOR SLB : STRONG_BUY 
+
+   DETAILS:  {'RECOMMENDATION': 'STRONG_BUY', 'BUY': 17, 'SELL': 0, 'NEUTRAL': 9} 
+
+ DATE > 08, Mar 2022
+ TIME > 16:39:46
+
+Asset SLB added to get_tradingview_data.txt 
+
