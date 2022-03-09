@@ -187,9 +187,9 @@ def main():
 
             if RSI<=30:
                 if _MACD_15m > _MACD_15m_signal*0.95 and ( _MACD_1h > _MACD_1h_signal ):
-                    print ('%s MACD buy')
+                    print ("%s MACD buy" % (symbol) )
                 else:
-                    print ('%s MACD sell')
+                    print ("%s MACD sell" % ( symbol ) )
 
 
             #if blue_line < orange_line and blue_line <= 0 and orange_line <= 0 and math.isclose(blue_line, orange_line, abs_tol = 0.04) == True and price < _EMA200 and RSI < 50:
