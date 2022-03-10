@@ -29,6 +29,16 @@ class txcolors:
     #BOLD = '\033[1m'
     #UNDERLINE = '\033[4m'
 
+def colorme ( string ):
+    out = ''
+    if 'BUY' in string:
+        out = '\033[92m' + string + '\033[0m'
+        return out
+    if 'SELL' in string:
+        out = '\033[91m' + string + '\033[0m'
+        return out
+    return string
+
 #def convert_to_str(value):
 #    new_str = str(value)
 #    return new_string
@@ -77,17 +87,19 @@ def calculate_rsi(p):
     return r
 
 def main():
-    keys = ['BUY','SELL','NEUTRAL']
+    #keys = ['BUY','SELL','NEUTRAL']
 
-    Intervals = { Interval.INTERVAL_1_DAY,
-                  Interval.INTERVAL_4_HOURS,
-                  Interval.INTERVAL_1_HOUR,
-                  Interval.INTERVAL_15_MINUTES
-                }
+    #Intervals = { Interval.INTERVAL_1_DAY,
+    #              Interval.INTERVAL_4_HOURS,
+    #              Interval.INTERVAL_1_HOUR,
+    #              Interval.INTERVAL_15_MINUTES
+    #            }
 
     interval = Interval.INTERVAL_1_DAY
 
     buy_list, rsi_list, ema_list = ( [], [], [] )
+    early_list = []
+
 
     today = datetime.today()
     thirty_days_ago = today - timedelta(days=30)
@@ -126,14 +138,21 @@ def main():
 
         for symbol, exchange in ticker_exchange.items():
 
-            oscCheck=0
-            maCheck=0
+            oscCheck = 0
+            maCheck  = 0
+            trend    = 'UP' 
 
             json_analysis      = taJson(symbol, exchange, Interval.INTERVAL_1_DAY)
             json_analysis_15m  = taJson(symbol, exchange, Interval.INTERVAL_15_MINUTES)
             json_analysis_1h   = taJson(symbol, exchange, Interval.INTERVAL_1_HOUR)
 
+
             recommendation = json_analysis.summary['RECOMMENDATION']
+
+
+            osc_recommendation  = json_analysis.oscillators['RECOMMENDATION']
+            mave_recommendation = json_analysis.moving_averages['RECOMMENDATION']
+
 
             # indicator names + values
             ind     = json_analysis.indicators
@@ -143,10 +162,22 @@ def main():
             # oscilators names + values
             osc = json_analysis.oscillators
 
-
+   
             currentPrice = round ( ind["close"], 2 )
+            currentPrice_string = str ( currentPrice )
+
             OPENING_PRICE= round ( ind['open'],  2 )
             daily_change = ind['change']
+
+
+            OSC_INDICATORS = [ 'W%R', 'CCI', 'MACD', 'RSI', 'Stoch.RSI' ]
+            osc_line = 'OSC: '
+            for indicator in OSC_INDICATORS:
+                oscResult = osc['COMPUTE'][indicator]
+                #print(f'{symbol} - Indicator for {indicator} is {oscResult}')
+                osc_line += ' ' + indicator + ' ' + oscResult + ','
+                #if osc['COMPUTE'][indicator] != 'SELL': oscCheck +=1
+
 
             P_SAR = round ( ind['P.SAR'], 2 )
 
@@ -182,14 +213,15 @@ def main():
             STOCH_DIFF = round(STOCH_K - STOCH_D,2)
             RSI_DIFF = round(RSI - RSI1,2)
 
-            BUY_SIGS = round(json_analysis.summary['BUY'],0)
-            BUY_SIGS2 = round(json_analysis_15m.summary['BUY'],0)
 
-            if RSI<=30:
-                if _MACD_15m > _MACD_15m_signal*0.95 and ( _MACD_1h > _MACD_1h_signal ):
-                    print ("%s MACD buy" % (symbol) )
-                else:
-                    print ("%s MACD sell" % ( symbol ) )
+            #BUY_SIGS = round(json_analysis.summary['BUY'],0)
+            #BUY_SIGS2 = round(json_analysis_15m.summary['BUY'],0)
+
+            #if RSI<=30:
+            #    if _MACD_15m > _MACD_15m_signal*0.95 and ( _MACD_1h > _MACD_1h_signal ):
+            #        print ("%s MACD buy" % (symbol) )
+            #    else:
+            #        print ("%s MACD sell" % ( symbol ) )
 
 
             #if blue_line < orange_line and blue_line <= 0 and orange_line <= 0 and math.isclose(blue_line, orange_line, abs_tol = 0.04) == True and price < _EMA200 and RSI < 50:
@@ -202,38 +234,38 @@ def main():
             #    print("GOOD TIME TO TAKE PROFIT")
 
             #####  BUY/SELL algo !!  #####
-            RSI_MIN   = 12  # Min RSI Level for Buy Signal - Under 25 considered oversold (12)
-            RSI_MAX   = 55  # Max RSI Level for Buy Signal - Over 80 considered overbought (55)
+            #RSI_MIN   = 12  # Min RSI Level for Buy Signal - Under 25 considered oversold (12)
+            #RSI_MAX   = 55  # Max RSI Level for Buy Signal - Over 80 considered overbought (55)
 
-            RSI_BUY   = 0.3 # Difference in RSI levels over last 2 timescales for a Buy Signal (-0.3)
-            STOCH_BUY = 10  # Difference between the Stoch K&D levels for a Buy Signal (10)
+            #RSI_BUY   = 0.3 # Difference in RSI levels over last 2 timescales for a Buy Signal (-0.3)
+            #STOCH_BUY = 10  # Difference between the Stoch K&D levels for a Buy Signal (10)
 
-            RSI_SELL = -5 # Difference in RSI levels over last 2 timescales for a Sell Signal (-5)
-            STOCH_SELL = -10 # Difference between the Stoch D&K levels for a Sell Signal (-10)
-            SIGNALS_SELL = 7 # Max number of buy signals on both INTERVALs to add coin to sell list (7)
+            #RSI_SELL = -5 # Difference in RSI levels over last 2 timescales for a Sell Signal (-5)
+            #STOCH_SELL = -10 # Difference between the Stoch D&K levels for a Sell Signal (-10)
+            #SIGNALS_SELL = 7 # Max number of buy signals on both INTERVALs to add coin to sell list (7)
 
 
-            if (math.isclose(_EMA20, _EMA50, abs_tol = 0.08) == True) and ( _EMA_20 > _EMA50 ):
-                print ("GOLDEN CROSS soon 20, 50 EMA")
-            if (math.isclose(_EMA20, _EMA50, abs_tol = 0.08) == True) and ( _EMA_20 < _EMA50 ):
-                print ("BEAR CROSS soon 20, 50 EMA")
+            #if (math.isclose(_EMA50, _EMA200, abs_tol = 0.08) == True) and ( _EMA_50 > _EMA200 ):
+            #    print ("GOLDEN CROSS soon 20, 50 EMA")
+            #if (math.isclose(_EMA50, _EMA200, abs_tol = 0.08) == True) and ( _EMA_50 < _EMA200 ):
+            #    print ("BEAR CROSS soon 20, 50 EMA")
 
-            if (RSI < 80) and (BUY_SIGS >= 10) and (STOCH_DIFF >= 0.01) and (RSI_DIFF >= 0.01):
-                print(f'{symbol} Signals OSC:  RSI:{RSI}/{RSI1} DIFF: {RSI_DIFF} | STOCH_K/D:{STOCH_K}/{STOCH_D} DIFF: {STOCH_DIFF} | BUYS: {BUY_SIGS}_{BUY_SIGS2}/26 | {oscCheck}-{maCheck}')
+            #if (RSI < 80) and (BUY_SIGS >= 10) and (STOCH_DIFF >= 0.01) and (RSI_DIFF >= 0.01):
+            #    print(f'{symbol} Signals OSC:  RSI:{RSI}/{RSI1} DIFF: {RSI_DIFF} | STOCH_K/D:{STOCH_K}/{STOCH_D} DIFF: {STOCH_DIFF} | BUYS: {BUY_SIGS}_{BUY_SIGS2}/26 | {oscCheck}-{maCheck}')
 
-            if (RSI >= RSI_MIN and RSI <= RSI_MAX) and (RSI_DIFF >= RSI_BUY):
-              if (STOCH_DIFF >= STOCH_BUY) and (STOCH_K >= STOCH_MIN and STOCH_K <= STOCH_MAX) and (STOCH_D >= STOCH_MIN and STOCH_D <= STOCH_MAX):
-                if (BUY_SIGS >= MA_SUMMARY) and (BUY_SIGS2 >= MA_SUMMARY2) and (STOCH_K > STOCH_K1):
-                  if (oscCheck >= OSC_THRESHOLD and maCheck >= MA_THRESHOLD):
+            #if (RSI >= RSI_MIN and RSI <= RSI_MAX) and (RSI_DIFF >= RSI_BUY):
+            #  if (STOCH_DIFF >= STOCH_BUY) and (STOCH_K >= STOCH_MIN and STOCH_K <= STOCH_MAX) and (STOCH_D >= STOCH_MIN and STOCH_D <= STOCH_MAX):
+            #    if (BUY_SIGS >= MA_SUMMARY) and (BUY_SIGS2 >= MA_SUMMARY2) and (STOCH_K > STOCH_K1):
+            #      if (oscCheck >= OSC_THRESHOLD and maCheck >= MA_THRESHOLD):
 
-                    print(f'\033[92m{symbol} Signals RSI: - Buy Signal Detected | {BUY_SIGS}_{BUY_SIGS2}/26')
+            #        print(f'\033[92m{symbol} Signals RSI: - Buy Signal Detected | {BUY_SIGS}_{BUY_SIGS2}/26')
 
-                    timestamp = datetime.now().strftime("%d/%m %H:%M:%S")
-                    print(f'  {symbol} Signals OSC: = RSI:{RSI}/{RSI1} DIFF: {RSI_DIFF} | STOCH_K/D:{STOCH_K}/{STOCH_D} DIFF: {STOCH_DIFF} | BUYS: {BUY_SIGS}_{BUY_SIGS2}/26 | {oscCheck}-{maCheck}\n')
-                  else:
-                    print(f'{SIGNAL_NAME} Signals RSI: - Stoch/RSI ok, not enough buy signals | {BUY_SIGS}_{BUY_SIGS2}/26 | {STOCH_DIFF}/{RSI_DIFF} | {STOCH_K}')
+            #        timestamp = datetime.now().strftime("%d/%m %H:%M:%S")
+            #        print(f'  {symbol} Signals OSC: = RSI:{RSI}/{RSI1} DIFF: {RSI_DIFF} | STOCH_K/D:{STOCH_K}/{STOCH_D} DIFF: {STOCH_DIFF} | BUYS: {BUY_SIGS}_{BUY_SIGS2}/26 | {oscCheck}-{maCheck}\n')
+            #      else:
+            #        print(f'{SIGNAL_NAME} Signals RSI: - Stoch/RSI ok, not enough buy signals | {BUY_SIGS}_{BUY_SIGS2}/26 | {STOCH_DIFF}/{RSI_DIFF} | {STOCH_K}')
 
-            
+
             #if ( _EMA10 > _EMA20 ) and ( currentPrice > _EMA200 ) and ( currentPrice > OPENING_PRICE) and (OPENING_PRICE > P_SAR ) and ( P_SAR > _EMA200 ):
             #    #and ( blue_line < orange_line ) and ( blue_line <= 0 and orange_line <= 0 ) and ( math.isclose(blue_line, orange_line, abs_tol = 0.04) == True ):
             #    position_ema = 'BUY'
@@ -247,10 +279,12 @@ def main():
             #if daily_change >= 17.0000:
             #    # SELL
 
-            if (BUY_SIGS < SIGNALS_SELL) and (BUY_SIGS2 < SIGNALS_SELL) and (STOCH_DIFF < STOCH_SELL) and (RSI_DIFF < RSI_SELL) and (STOCH_K < STOCH_K1):
-                print(f'\033[33mSignals RSI: {symbol} - Sell Signal Detected | {BUY_SIGS}_{BUY_SIGS2}/26')
+            #if (BUY_SIGS < SIGNALS_SELL) and (BUY_SIGS2 < SIGNALS_SELL) and (STOCH_DIFF < STOCH_SELL) and (RSI_DIFF < RSI_SELL) and (STOCH_K < STOCH_K1):
+            #    print(f'\033[33mSignals RSI: {symbol} - Sell Signal Detected | {BUY_SIGS}_{BUY_SIGS2}/26')
 
-            print(txcolors.NEUTRAL,'  {:8s}  {:10f}  {:15s}  {:12f}  {:12f}  {:12s}  '.format ( symbol, currentPrice, recommendation, RSI1, RSI, calculate_rsi(RSI) ),'x',txcolors.ENDC)
+            #print(txcolors.NEUTRAL,'  {:8s}  {:10f}  ALL:{:25s} OSC:{:20s} {:35s}  {:10s}  '.format ( symbol, currentPrice, recommendation, osc_recommendation, osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
+            print('  {:6s}  {:6s}  {:10s}  OSC:{:23s} mAVE:{:30s}  {:30s}  {:15s}  '.format ( symbol, currentPrice_string , colorme ( recommendation ), colorme ( osc_recommendation ), colorme ( mave_recommendation ),
+                osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
             print('--------------------------------------------------------------------------')
 
             time.sleep(1)

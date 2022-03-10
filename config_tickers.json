@@ -1,4 +1,5 @@
 {
+    "KBWB":"NASDAQ",
     "TD":"NYSE",
     "BMO":"NYSE",
     "BNS":"NYSE",
@@ -12,6 +13,7 @@
     "TD":"NYSE",
     "RY":"NYSE",
     "KO":"NYSE",
+    "DDOG":"NASDAQ",
     "MSFT":"NASDAQ",
     "APA":"NASDAQ",
     "TSLA":"NASDAQ",
