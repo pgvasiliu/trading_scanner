@@ -3,54 +3,28 @@
 
 
 ```bash
-$ ./scanner.py
-   AMD       105.530000  SELL                38.250000     40.700000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-   APA        38.630000  BUY                 66.140000     68.120000  RSI_ApproachingOverbought   x 
---------------------------------------------------------------------------
-   BKR        34.800000  BUY                 77.080000     77.120000  RSI_Overbought   x 
---------------------------------------------------------------------------
-   BMO       110.950000  SELL                40.290000     40.010000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-Signals RSI: BNS - Sell Signal Detected | 4_2/26
-   BNS        70.180000  SELL                48.210000     41.610000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-CNQ Signals OSC:  RSI:75.83/75.57 DIFF: 0.26 | STOCH_K/D:83.88/80.35 DIFF: 3.53 | BUYS: 14_4/26 | 0-0
-   CNQ        59.710000  BUY                 75.570000     75.830000  RSI_Overbought   x 
---------------------------------------------------------------------------
-   F          16.030000  SELL                35.470000     35.970000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-%s MACD sell
-   FB        190.290000  SELL                25.700000     28.010000  RSI_Oversold   x 
---------------------------------------------------------------------------
-   HD        316.740000  SELL                35.550000     32.370000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-Signals RSI: KO - Sell Signal Detected | 3_1/26
-   KO         58.660000  SELL                47.910000     36.680000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-   KR         55.710000  BUY                 77.630000     69.210000  RSI_ApproachingOverbought   x 
---------------------------------------------------------------------------
-   MRO        24.090000  BUY                 74.250000     71.220000  RSI_Overbought   x 
---------------------------------------------------------------------------
-   MSFT      275.850000  STRONG_SELL         36.710000     35.180000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-   NVDA      215.140000  SELL                37.050000     37.940000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-   OXY        54.600000  BUY                 80.470000     77.600000  RSI_Overbought   x 
---------------------------------------------------------------------------
-   RY        105.020000  SELL                36.180000     33.340000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-SLB Signals OSC:  RSI:68.96/61.99 DIFF: 6.97 | STOCH_K/D:68.77/52.01 DIFF: 16.76 | BUYS: 17_15/26 | 0-0
-   SLB        45.080000  STRONG_BUY          61.990000     68.960000  RSI_ApproachingOverbought   x 
---------------------------------------------------------------------------
-%s MACD buy
-   SNOW      191.610000  SELL                25.660000     25.430000  RSI_Oversold   x 
---------------------------------------------------------------------------
-   TD         74.690000  SELL                35.900000     33.610000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-   TSLA      824.400000  SELL                40.070000     43.090000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
-   WFC        46.460000  SELL                27.310000     30.010000  RSI_ApproachingOversold   x 
---------------------------------------------------------------------------
+$ ./scanner.py config_tickers_canada.json
+  BCE     70.35   STRONG_BUY  OSC:BUY        mAVE:STRONG_BUY             OSC:  MACD BUY,                 RSI_ApproachingOverbought    
+--------------------------------------------------------------------
+  CP      99.5    BUY  OSC:NEUTRAL           mAVE:STRONG_BUY             OSC:  CCI SELL, MACD BUY,       RSI_ApproachingOverbought    
+--------------------------------------------------------------------
+  HXE     26.52   BUY  OSC:NEUTRAL           mAVE:STRONG_BUY             OSC:  MACD BUY,                 RSI_ApproachingOverbought    
+--------------------------------------------------------------------
+  L       114.68  BUY  OSC:SELL              mAVE:STRONG_BUY             OSC:  W%R SELL, CCI SELL, MACD BUY, RSI SELL,  RSI_Overbought     
+--------------------------------------------------------------------
+
+
+$ ./scanner.py config_tickers_us.json
+  AMD     104.67  STRONG_SELL  OSC:NEUTRAL   mAVE:STRONG_SELL            OSC:  CCI BUY, MACD SELL,       RSI_ApproachingOversold    
+--------------------------------------------------------------------
+  AMZN    2944.745  SELL  OSC:SELL           mAVE:STRONG_SELL            OSC:  MACD SELL,                RSI_Neutral        
+--------------------------------------------------------------------
+  APA     39.59   BUY  OSC:NEUTRAL           mAVE:STRONG_BUY             OSC:  W%R SELL, MACD BUY,       RSI_ApproachingOverbought    
+--------------------------------------------------------------------
+  AXP     169.99  SELL  OSC:SELL             mAVE:STRONG_SELL            OSC:  MACD SELL,                RSI_ApproachingOversold    
+--------------------------------------------------------------------
+  BMO     115.69  BUY  OSC:SELL              mAVE:STRONG_BUY             OSC:  MACD SELL,                RSI_Neutral        
+--------------------------------------------------------------------
+
 ```
 
