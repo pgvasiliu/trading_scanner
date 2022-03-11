@@ -83,7 +83,7 @@ def get_all_resistance_levels(ticker,current_price,previous_close):
     resistance_level_bank = []
     resistance_levels = ['15','30','60','D','W','M']
     for level in resistance_levels:
-        resistance_level_bank.append(check_if_resistance_broken(ticker,level,current_price,previous_close))         
+        resistance_level_bank.append(check_if_resistance_broken(ticker,level,current_price,previous_close))
     # print(resistance_level_bank,"bank")
     for resistance_level in resistance_level_bank:
         print(resistance_level)
@@ -229,7 +229,8 @@ def calculate_stock_gain_needed_to_break_next_resistance(current_price,next_resi
 
 
 extract_stock_previous_and_current_price('HD')
+extract_stock_previous_and_current_price('MSFT')
 extract_stock_previous_and_current_price('NVDA')
 # create_resistance_report('DNN',1.61,1.41)
 # create_resistance_report('AFRM',116.28,107.7)
-# print (get_resistance_levels('OXY','48'))
+#print (get_resistance_levels('OXY','57.90'))

@@ -6,16 +6,16 @@ import sys
 import json
 import pprint
 import calendar
-import time
-from datetime import datetime, timedelta
 
 from os.path import expanduser
+
+import time
 from datetime import datetime, timedelta
 
 #from tradingview_ta import TA_Handler#, Interval, Exchange
 from tradingview_ta import TA_Handler, Interval
 
-import colorama
+#import colorama
 import argparse
 
 class txcolors:
@@ -399,7 +399,6 @@ def main(x):
     if os.path.exists(lockfile):
         os.unlink (lockfile)
 
-    sys.exit(0)
 
 
 if __name__ == "__main__":
@@ -412,6 +411,8 @@ if __name__ == "__main__":
         ticker_files = sorted ( set (args.files) )
         for myfile in ticker_files:
             main(myfile)
+
+        sys.exit(0)
 
     except KeyboardInterrupt:
         homedir = os.path.expanduser("~")

@@ -1,9 +1,14 @@
 # trading_scanner
 
-
+INSTALL dependencies:
 
 ```bash
-$ ./scanner.py config_tickers_canada.json
+pip3 install tradingview_ta
+```
+ 
+
+```bash
+
   BCE     70.35   STRONG_BUY  OSC:BUY        mAVE:STRONG_BUY             OSC:  MACD BUY,                 RSI_ApproachingOverbought    
 --------------------------------------------------------------------
   CP      99.5    BUY  OSC:NEUTRAL           mAVE:STRONG_BUY             OSC:  CCI SELL, MACD BUY,       RSI_ApproachingOverbought    
@@ -25,6 +30,10 @@ $ ./scanner.py config_tickers_us.json
 --------------------------------------------------------------------
   BMO     115.69  BUY  OSC:SELL              mAVE:STRONG_BUY             OSC:  MACD SELL,                RSI_Neutral        
 --------------------------------------------------------------------
+
+$ ./scanner.py config_tickers_canada.json  config_tickers_us.json
+
+[ .... ]
 
 ```
 
