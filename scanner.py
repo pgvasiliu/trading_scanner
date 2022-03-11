@@ -201,7 +201,7 @@ def main(x):
             _vol    = ind['volume']
             _change = ind['change']
 
-            ticker_data =  { 'open': _open, 'low': _low, 'high': _high, 'close': _close, 'change': _change }
+            ticker_data =  { 'open': _open, 'low': _low, 'high': _high, 'close': _close, 'volume': _vol, 'change': _change }
 
 
             OSC_INDICATORS = [ 'W%R', 'CCI', 'MACD', 'RSI', 'Stoch.RSI' ]
@@ -258,7 +258,7 @@ def main(x):
             ticker_data['_ema10'], ticker_data['_ema20'], ticker_data['_ema30'], ticker_data['_ema50'], ticker_data['_ema100'], ticker_data['_ema200'] = ( _ema10, _ema20, _ema30, _ema50, _ema100, _ema200  )
 
             ticker_data['_psar'] = _psar
-            ticker_data['_wrr']  = _wr
+            ticker_data['_wr']   = _wr
 
             ticker_data['stock_diff'] = stock_diff
             ticker_data['rsi_diff']   = rsi_diff
@@ -271,13 +271,25 @@ def main(x):
                 filehandle.write( json.dumps ( ticker_data, indent=4) + '\n')
 
 
-
+            #################
             #####  BUY  #####
+            #################
 
-            # Load yesterday's json data
+            # Load yesterday's json data. TradingView API does not return yesterday's data for volume and W%R
+            volume1 = 0
+            _wr1    = 0
+
             yesterdays_data = ticker_folder + '/' + yesterday + '/' + 'data.json'
-            #if not os.path.exists(yesterdays_data):
+            if (os.path.exists(yesterdays_data)) and (os.stat(yesterdays_data).st_size > 0):
+                with open(yesterdays_data) as yesterdays_json:
+                    old_data = json.load(yesterdays_json)
+                    if 'volume' in old_data:
+                        volume1 = old_data['volume']
+                    if '_wr' in old_data:
+                        _wr1    = old_data['_wr']
                 # [ ..... ]
+            # [ ..... ]
+
 
 
             #######################
