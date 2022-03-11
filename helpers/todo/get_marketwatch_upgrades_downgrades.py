@@ -53,5 +53,13 @@ def get_analysts_upgrades_downgrades_marketwatch():
 #upgrades = []
 upgrades = get_analysts_upgrades_downgrades_marketwatch()
 
+
+#print (upgrades)
+
+#for i in upgrades:
+#    print ("%s, %s, %s, %s" % ( i['date'], i['ticker'], i['rating'], i['analyst']) )
+
+tickers = {}
+
 for i in upgrades:
-    print ("%s, %s, %s, %s" % ( i['date'], i['ticker'], i['rating'], i['analyst']) )
+    data = 

@@ -18,6 +18,42 @@ from tradingview_ta import TA_Handler, Interval
 #import colorama
 import argparse
 
+
+from bs4 import BeautifulSoup
+import requests
+
+
+def get_analysts_upgrades_downgrades_marketwatch():
+    def add_data_to_dict(n_check, n_val, key, val, storage_dict):
+
+        if n_val == n_check:
+            storage_dict[key] = val.string
+
+    url = "https://www.marketwatch.com/tools/upgrades-downgrades"
+    raw_page = requests.get(url)
+    soup = BeautifulSoup(raw_page.content, 'lxml')
+
+    table = soup.find('table')
+    raw_data_rows = table.find_all('tr')
+
+    row_text_data = list()
+
+    for tr in raw_data_rows[1:]:
+
+        data = dict()
+        for n, td in enumerate(tr):
+            add_data_to_dict(1, n, "date", td.string, data)
+            add_data_to_dict(3, n, "ticker", td.string, data)
+            add_data_to_dict(5, n, "company", td.string, data)
+            add_data_to_dict(7, n, "rating", td.string, data)
+            add_data_to_dict(9, n, "analyst", td.string, data)
+
+        row_text_data.append(data)
+
+    return row_text_data
+
+
+
 class txcolors:
     NEUTRAL = '\033[95m'
     #OKBLUE = '\033[94m'
@@ -28,6 +64,7 @@ class txcolors:
     ENDC = '\033[0m'
     #BOLD = '\033[1m'
     #UNDERLINE = '\033[4m'
+    YELLOW = '\033[92m'
 
 def colorme ( string ):
     out = ''
@@ -91,7 +128,7 @@ def calculate_rsi(p):
         r= "UNKNOWN"
     return r
 
-def main(x):
+def main(x, upgrades):
     #keys = ['BUY','SELL','NEUTRAL']
 
     #Intervals = { Interval.INTERVAL_1_DAY,
@@ -147,6 +184,8 @@ def main(x):
 
     tickers_exchange_json = {}
 
+
+
     # load the tickers json config file
     with open(x) as f:
         data = json.load(f)
@@ -154,6 +193,13 @@ def main(x):
 
         # loop through tickers
         for symbol, exchange in ticker_exchange.items():
+
+            upgrade_downgrade = '['
+            for i in upgrades:
+                if i['ticker'] == symbol:
+                    upgrade_downgrade += "%s,%s,%s " % ( i['date'], i['rating'], i['analyst'])
+
+            upgrade_downgrade += ']'
 
             # create folders and subfolders
             ticker_folder = folder + '/' + symbol + '_' + exchange
@@ -395,8 +441,10 @@ def main(x):
             #    print(f'\033[33mSignals RSI: {symbol} - Sell Signal Detected | {BUY_SIGS}_{BUY_SIGS2}/26')
 
             #print(txcolors.NEUTRAL,'  {:8s}  {:10f}  ALL:{:25s} OSC:{:20s} {:35s}  {:10s}  '.format ( symbol, price, recommendation, osc_recommendation, osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
-            print('  {:6s}  {:6s}  {:10s}  OSC:{:23s} mAVE:{:30s}  {:30s}  {:15s}  '.format ( symbol, price_string , colorme ( recommendation ), colorme ( osc_recommendation ), colorme ( mave_recommendation ),
-                osc_line, calculate_rsi( _rsi ) ),'',txcolors.ENDC)
+            #print(txcolors.NEUTRAL,'  {:8s}  {:10s}  {:25s}   {:20s}   {:40s})  {:30s}  {:15s}  \033[33m[{:15s}] '.format ( symbol, price_string , colorme ( recommendation ), 'OSC:' + colorme ( osc_recommendation ), 'mAVE:' + colorme ( mave_recommendation ),
+            print(txcolors.NEUTRAL,'  {:8s}  {:10s}  {:25s}   {:20s}   {:40s}  {:30s}   \033[33m{:15s} '.format ( symbol, price_string , 
+                colorme ( recommendation ), 'OSC:' + colorme ( osc_recommendation ), 'mAVE:' + colorme ( mave_recommendation ),
+                osc_line,  upgrade_downgrade ),'',txcolors.ENDC)
             print('--------------------------------------------------------------------')
 
             time.sleep(1)
@@ -415,6 +463,9 @@ def main(x):
 
 if __name__ == "__main__":
     try:
+
+        upgrades = get_analysts_upgrades_downgrades_marketwatch()
+
         parser = argparse.ArgumentParser()
         parser.add_argument('files', nargs='+')
 
@@ -422,7 +473,8 @@ if __name__ == "__main__":
 
         ticker_files = sorted ( set (args.files) )
         for myfile in ticker_files:
-            main(myfile)
+            print('--------------------------------------------------------------------')
+            main(myfile, upgrades)
 
         sys.exit(0)
 
