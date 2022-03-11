@@ -52,9 +52,14 @@ def colorme ( string ):
 
 def taJson(product, exch, myinterval):
     p = product.replace('-', '')
+    if exch in [ "TSX", "TSE" ]:
+        screener = "canada"
+    else:
+        screener = "america"
+
     ta = TA_Handler(
         symbol=p,
-        screener="america",
+        screener=screener,
         exchange=exch,
         interval=myinterval
     )

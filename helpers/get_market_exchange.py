@@ -31,8 +31,12 @@ def get_market_exchange(ticker):
                     exchange = "AMEX"
                 else:
                     exchange = el['exchange']
+            if el['exchange'] in ['TSE', 'TSX']:
+                exchange = "TSX"
     if exchange in ['NYSE', 'NASDAQ', 'ARCA',"AMEX"]:
         screener = "america"
+    elif exchange in ['TSE', 'TSX']:
+        screener = "canada"
     else:
         screener = "crypto"
     return(screener, exchange)
