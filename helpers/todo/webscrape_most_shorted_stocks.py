@@ -12,5 +12,5 @@ def scrape_most_shorted_stocks():
     most_shorted_stocks.pop(0)
     return most_shorted_stocks
 
-print (scrape_most_shorted_stocks())
+print (sorted(scrape_most_shorted_stocks()))
 

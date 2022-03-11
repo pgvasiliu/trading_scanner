@@ -117,59 +117,6 @@ def get_all_resistance_levels(ticker,current_price,previous_close):
                 except:
                     "hello"
 
-        # if resistance_level['time_interval'] == 'D':
-        #     print("D",resistance_level)
-        # print("YEET", resistance_level)
-        # try:
-        #     print("yup")
-        #     if resistance_level['break_through'] == 'True' and resistance_level['time_interval'] == 'M':
-        #         print("1")
-        #         return resistance_level
-        #         break
-        #     else:
-        #         print("nope")
-        #         try:
-                
-        #             if resistance_level['break_through'] == 'True' and resistance_level['time_interval'] == 'W':
-        #                 print("YESSS")
-        #                 return resistance_level
-        #                 break
-        #             else:
-        #                 try:
-        #     # except:
-        #                     if resistance_level['break_through'] == 'True' and resistance_level['time_interval'] == 'D':
-        #                         print("hello")
-        #                         return resistance_level
-        #                         break
-        #                     else:
-        #                         continue
-        #                     break 
-        #                 except:
-        #                     Exception
-        #                     continue
-
-                # else:
-                #     if resistance_level['break_through'] == 'True' and resistance_level['time_interval'] == '60':
-                #         # return resistance_level
-                #         break
-                #     else:    
-                #         if resistance_level['break_through'] == 'True' and resistance_level['time_interval'] == '30':
-                #             # return resistance_level
-                #             break
-                #         else:    
-                #             if resistance_level['break_through'] == 'True' and resistance_level['time_interval'] == '15':
-                #                 # return resistance_level
-                #                 break
-        # return resistance_level
-        #             break
-        #         except:
-        #             Exception
-        #             continue
-        #     break
-        # except:
-        #     Exception
-        #     continue
-        # return resistance_level
 
 def get_next_high_for_any_interval(previous_close):
     i = 0

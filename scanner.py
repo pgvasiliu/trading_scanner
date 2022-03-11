@@ -109,24 +109,24 @@ def taJson(product, exch, myinterval):
         sys.exit(1)
 
 
-def calculate_rsi(p):
-    if (p < 20 ):
-        r = "RSI_ExtremelyOversold"
-    elif (p >= 20 and p <= 30):
-        r = "RSI_Oversold"
-    elif (p > 30 and p <= 45):
-        r = "RSI_ApproachingOversold"
-    elif (p > 45 and p <= 55):
-        r = "RSI_Neutral"
-    elif (p > 55 and p <= 70):
-        r = "RSI_ApproachingOverbought"
-    elif (p > 70 and p <= 80):
-        r = "RSI_Overbought"
-    elif (p > 80):
-        r = "RSI_ExtremelyOverbought"
-    else :
-        r= "UNKNOWN"
-    return r
+#def calculate_rsi(p):
+#    if (p < 20 ):
+#        r = "RSI_ExtremelyOversold"
+#    elif (p >= 20 and p <= 30):
+#        r = "RSI_Oversold"
+#    elif (p > 30 and p <= 45):
+#        r = "RSI_ApproachingOversold"
+#    elif (p > 45 and p <= 55):
+#        r = "RSI_Neutral"
+#    elif (p > 55 and p <= 70):
+#        r = "RSI_ApproachingOverbought"
+#    elif (p > 70 and p <= 80):
+#        r = "RSI_Overbought"
+#    elif (p > 80):
+#        r = "RSI_ExtremelyOverbought"
+#    else :
+#        r= "UNKNOWN"
+#    return r
 
 def main(x, upgrades):
     #keys = ['BUY','SELL','NEUTRAL']

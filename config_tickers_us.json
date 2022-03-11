@@ -42,6 +42,10 @@
     "JNJ":"NYSE",
     "PG":"NYSE",
     "CVS":"NYSE",
-    "XOM":"NYSE"
+    "XOM":"NYSE",
+    "CAT":"NYSE",
+    "COST":"NASDAQ",
+    "DE":"NYSE",
+    "MCD":"NYSE"
 }
 
