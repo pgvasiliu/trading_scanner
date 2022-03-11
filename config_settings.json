@@ -1,4 +1,5 @@
 {
-    "symbol_url":"https://symbol-search.tradingview.com/symbol_search/?text={}"
+    "symbol_url":"https://symbol-search.tradingview.com/symbol_search/?text={}",
+    "data_folder":"./data"
 }
 

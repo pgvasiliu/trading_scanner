@@ -101,13 +101,15 @@ def main():
     early_list = []
 
 
-    today = datetime.today()
-    thirty_days_ago = today - timedelta(days=30)
-    tt = thirty_days_ago.strftime("%Y-%m-%d")
+    #today    = datetime.today()
+    today     = time.strftime("%Y-%m-%d")
+    tt = datetime.today() - timedelta(days=1)
+    yesterday = tt.strftime("%Y-%m-%d")
+
+    
 
     homedir = os.path.expanduser("~")
     lockfile = homedir + '/.s.lock'
-
 
 #    if not os.path.exists(lockfile):
 #        with open(lockfile, 'w'): pass
@@ -126,17 +128,34 @@ def main():
 #            os.unlink (lockfile)
 
 
-    with open("config_settings.json") as f:
-        config = json.load(f)
-        for key, value in config.items():
-            os.environ[key] = str(value)
+    #with open("config_settings.json") as f:
+    #    config = json.load(f)
+    #    for key, value in config.items():
+    #        os.environ[key] = str(value)
+    with open('config_settings.json') as json_file:
+        config_settings = json.load(json_file)
 
+    folder = config_settings['data_folder']
+    
     tickers_exchange_json = {}
+
+    # load the tickers json config file
     with open('config_tickers.json') as f:
         data = json.load(f)
         ticker_exchange = dict(sorted(data.items()))
 
+        # loop through tickers
         for symbol, exchange in ticker_exchange.items():
+
+            # create folders and subfolders
+            ticker_folder = folder + '/' + symbol 
+            try:
+                os.makedirs(ticker_folder + '/' + today, exist_ok=True)
+                os.makedirs(ticker_folder + '/' + yesterday, exist_ok=True)
+            except OSError as e:
+                if errno.EEXIST != e.errno:
+                    raise
+
 
             oscCheck = 0
             maCheck  = 0
@@ -166,52 +185,94 @@ def main():
             currentPrice = round ( ind["close"], 2 )
             currentPrice_string = str ( currentPrice )
 
-            OPENING_PRICE= round ( ind['open'],  2 )
-            daily_change = ind['change']
+            #OPENING_PRICE= round ( ind['open'],  2 )
+            #daily_change = ind['change']
+
+            price   = ind['close']
+
+            _low    = ind['low']
+            _high   = ind['high']
+            _open   = ind['open']
+            _close  = ind['close']
+            _vol    = ind['volume']
+            _change = ind['change']
+
+            ticker_data =  { 'open': _open, 'low': _low, 'high': _high, 'close': _close, 'change': _change }
 
 
             OSC_INDICATORS = [ 'W%R', 'CCI', 'MACD', 'RSI', 'Stoch.RSI' ]
             osc_line = 'OSC: '
             for indicator in OSC_INDICATORS:
                 oscResult = osc['COMPUTE'][indicator]
-                #print(f'{symbol} - Indicator for {indicator} is {oscResult}')
-                osc_line += ' ' + indicator + ' ' + oscResult + ','
-                #if osc['COMPUTE'][indicator] != 'SELL': oscCheck +=1
+                if 'NEUTRAL' not in oscResult:
+                    #print(f'{symbol} - Indicator for {indicator} is {oscResult}')
+                    osc_line += ' ' + indicator + ' ' + oscResult + ','
+                    #if osc['COMPUTE'][indicator] != 'SELL': oscCheck +=1
 
 
-            P_SAR = round ( ind['P.SAR'], 2 )
+            #P_SAR = round ( ind['P.SAR'], 2 )
 
-            # RSI
-            RSI = round (ind["RSI"], 2)
+            #####  indicators  #####
+            _rsi  = ind["RSI"]
+            _rsi1 = ind['RSI[1]']
+
+
             #print ( calculate_rsi ( rsi ))
 
-            RSI1 = round(ind['RSI[1]'],2)
+            _stock_k  = ind['Stoch.K']
+            _stock_d  = ind['Stoch.D']
 
-            STOCH_K = round(ind['Stoch.K'],2)
-            STOCH_D = round(ind['Stoch.D'],2)
+            _stock_k1 = ind['Stoch.K[1]']
+            _stock_d1 = ind['Stoch.D[1]']
 
-            STOCH_K1 = round(ind['Stoch.K[1]'],2)
-            STOCH_D1 = round(ind['Stoch.D[1]'],2)
+            _macd_blue   = ind["MACD.macd"]    # MACD blue   line
+            _macd_orange = ind["MACD.signal"]  # MACD orange line
+
+            _ema10  = ind['EMA10']
+            _ema20  = ind['EMA20']
+            _ema30  = ind['EMA30']
+            _ema50  = ind['EMA50']
+            _ema100 = ind['EMA100']
+            _ema200 = ind['EMA200']
+
+            _cci20  = ind['CCI20']
+            _cci201 = ind['CCI20[1]']
+
+            stock_diff = round(_stock_k - _stock_d,2)
+            rsi_diff   = round( _rsi - _rsi1,2)
 
 
-            #####  MACD  #####
-            blue_line   = ind["MACD.macd"]   #BLUE LINE
-            orange_line = ind["MACD.signal"] #ORANGE LINE
 
-            _MACD_15m        = ind_15m['MACD.macd']
-            _MACD_15m_signal = ind_15m['MACD.signal']
-            _MACD_1h         = ind_1h['MACD.macd']
-            _MACD_1h_signal  = ind_1h['MACD.signal']
+            ticker_data['_rsi'], ticker_data['_rsi1'] = ( _rsi, _rsi1 )
+            ticker_data['_stock_k'], ticker_data['_stock_d'], ticker_data['_stock_k1'], ticker_data['_stock_d1'] = ( _stock_k, _stock_d, _stock_k1, _stock_d1 )
 
-            #####  EMA  #####
-            _EMA10  = ind['EMA10']
-            _EMA20  = ind['EMA20']
-            _EMA30  = ind['EMA30']
-            _EMA50  = ind['EMA50']
-            _EMA200 = ind['EMA200']
+            ticker_data['_macd_blue'],ticker_data['_macd_orange']   = ( _macd_blue, _macd_orange )
+            ticker_data['_cci20'], ticker_data['_cci201'] = ( _cci20, _cci201 )
+            ticker_data['_ema10'], ticker_data['_ema20'], ticker_data['_ema30'], ticker_data['_ema50'], ticker_data['_ema100'], ticker_data['_ema200'] = ( _ema10, _ema20, _ema30, _ema50, _ema100, _ema200  )
 
-            STOCH_DIFF = round(STOCH_K - STOCH_D,2)
-            RSI_DIFF = round(RSI - RSI1,2)
+            ticker_data['stock_diff'] = stock_diff
+            ticker_data['rsi_diff']   = rsi_diff
+
+            #####  save data for today  #####
+            file_dest = ticker_folder + '/' + today + '/' + 'data.json'
+            with open(file_dest, 'w') as filehandle:
+                filehandle.write( json.dumps ( ticker_data, indent=4) + '\n')
+
+
+
+            #####  BUY  #####
+
+            # price > yesterday's price
+            if ( _change > 0 ):
+
+                # EMA
+                if ( price > _ema10 ) and ( price > _ema20 ) and ( _ema10 > _ema20 ):
+
+                    # CCI
+                    if ( _cci20 > 100 ) and (_cci201 < 100) and ( _cci20 > _cci201 ):
+                    # W%R
+                    #if (( _CCI20 > _CCI201 ) and ( _CCI20 > -20 ) and (_CCI201 < -20) ):
+                        print ("BUY")
 
 
             #BUY_SIGS = round(json_analysis.summary['BUY'],0)
@@ -284,8 +345,8 @@ def main():
 
             #print(txcolors.NEUTRAL,'  {:8s}  {:10f}  ALL:{:25s} OSC:{:20s} {:35s}  {:10s}  '.format ( symbol, currentPrice, recommendation, osc_recommendation, osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
             print('  {:6s}  {:6s}  {:10s}  OSC:{:23s} mAVE:{:30s}  {:30s}  {:15s}  '.format ( symbol, currentPrice_string , colorme ( recommendation ), colorme ( osc_recommendation ), colorme ( mave_recommendation ),
-                osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
-            print('--------------------------------------------------------------------------')
+                osc_line, calculate_rsi( _rsi ) ),'',txcolors.ENDC)
+            print('--------------------------------------------------------------------')
 
             time.sleep(1)
             #sys.exit(0)

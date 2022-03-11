@@ -1,6 +1,43 @@
-$ ./get_market_exchange.py BMO PDS SLB XOM
-BMO:NYSE
-PDS:NYSE
-SLB:NYSE
-XOM:NYSE
+$ ./get_market_exchange.py AMZN AMD APA AXP BMO BNS CNQ CVE F FB GOOG HD ITOT KBWB KO KR KRE MRO MSFT NVDA  OXY RY SCHD SHOP SLB SNOW SPY TD TSLA UAA VLO VTI VYM WFC XLE XLK XLP XLU XME | jq .
+{
+  "AMD": "NASDAQ",
+  "AMZN": "NASDAQ",
+  "APA": "NASDAQ",
+  "AXP": "NYSE",
+  "BMO": "NYSE",
+  "BNS": "NYSE",
+  "CNQ": "NYSE",
+  "CVE": "NYSE",
+  "F": "NYSE",
+  "FB": "NASDAQ",
+  "GOOG": "NASDAQ",
+  "HD": "NYSE",
+  "ITOT": "AMEX",
+  "KBWB": "NASDAQ",
+  "KO": "NYSE",
+  "KR": "NYSE",
+  "KRE": "AMEX",
+  "MRO": "NYSE",
+  "MSFT": "NASDAQ",
+  "NVDA": "NASDAQ",
+  "OXY": "NYSE",
+  "RY": "NYSE",
+  "SCHD": "AMEX",
+  "SHOP": "NYSE",
+  "SLB": "NYSE",
+  "SNOW": "NYSE",
+  "SPY": "AMEX",
+  "TD": "NYSE",
+  "TSLA": "NASDAQ",
+  "UAA": "NYSE",
+  "VLO": "NYSE",
+  "VTI": "AMEX",
+  "VYM": "AMEX",
+  "WFC": "NYSE",
+  "XLE": "AMEX",
+  "XLK": "AMEX",
+  "XLP": "AMEX",
+  "XLU": "AMEX",
+  "XME": "AMEX"
+}
 
