@@ -141,7 +141,7 @@ def main():
         config_settings = json.load(json_file)
 
     folder = config_settings['data_folder']
-    
+
     tickers_exchange_json = {}
 
     # load the tickers json config file
@@ -164,36 +164,32 @@ def main():
 
             oscCheck = 0
             maCheck  = 0
-            trend    = 'UP' 
+            #trend    = 'UP'
 
             json_analysis      = taJson(symbol, exchange, Interval.INTERVAL_1_DAY)
-            json_analysis_15m  = taJson(symbol, exchange, Interval.INTERVAL_15_MINUTES)
-            json_analysis_1h   = taJson(symbol, exchange, Interval.INTERVAL_1_HOUR)
+            #json_analysis_15m  = taJson(symbol, exchange, Interval.INTERVAL_15_MINUTES)
+            #json_analysis_1h   = taJson(symbol, exchange, Interval.INTERVAL_1_HOUR)
 
 
-            recommendation = json_analysis.summary['RECOMMENDATION']
-
-
+            # overall rating, oscillator and moving averages recommendation
+            recommendation      = json_analysis.summary['RECOMMENDATION']
             osc_recommendation  = json_analysis.oscillators['RECOMMENDATION']
             mave_recommendation = json_analysis.moving_averages['RECOMMENDATION']
 
 
             # indicator names + values
             ind     = json_analysis.indicators
-            ind_15m = json_analysis_15m.indicators
-            ind_1h  = json_analysis_1h.indicators
+            #ind_15m = json_analysis_15m.indicators
+            #ind_1h  = json_analysis_1h.indicators
 
             # oscilators names + values
             osc = json_analysis.oscillators
 
-   
-            currentPrice = round ( ind["close"], 2 )
-            currentPrice_string = str ( currentPrice )
 
-            #OPENING_PRICE= round ( ind['open'],  2 )
-            #daily_change = ind['change']
-
-            price   = ind['close']
+            # current price
+            #currentPrice = round ( ind["close"], 2 )
+            price        = ind['close']
+            price_string = str ( price )
 
             _low    = ind['low']
             _high   = ind['high']
@@ -215,7 +211,6 @@ def main():
                     #if osc['COMPUTE'][indicator] != 'SELL': oscCheck +=1
 
 
-            #P_SAR = round ( ind['P.SAR'], 2 )
 
             #####  indicators  #####
             _rsi  = ind["RSI"]
@@ -230,8 +225,8 @@ def main():
             _stock_k1 = ind['Stoch.K[1]']
             _stock_d1 = ind['Stoch.D[1]']
 
-            _macd_blue   = ind["MACD.macd"]    # MACD blue   line
-            _macd_orange = ind["MACD.signal"]  # MACD orange line
+            _macd_orange   = float(ind["MACD.macd"])    # MACD blue   line
+            _macd_blue     = float(ind["MACD.signal"])  # MACD orange line
 
             _ema10  = ind['EMA10']
             _ema20  = ind['EMA20']
@@ -243,9 +238,13 @@ def main():
             _cci20  = ind['CCI20']
             _cci201 = ind['CCI20[1]']
 
+            _psar   = ind['P.SAR']
+
+            _wr     = ind['W.R']
+
+
             stock_diff = round(_stock_k - _stock_d,2)
             rsi_diff   = round( _rsi - _rsi1,2)
-
 
 
             ticker_data['_rsi'], ticker_data['_rsi1'] = ( _rsi, _rsi1 )
@@ -255,8 +254,13 @@ def main():
             ticker_data['_cci20'], ticker_data['_cci201'] = ( _cci20, _cci201 )
             ticker_data['_ema10'], ticker_data['_ema20'], ticker_data['_ema30'], ticker_data['_ema50'], ticker_data['_ema100'], ticker_data['_ema200'] = ( _ema10, _ema20, _ema30, _ema50, _ema100, _ema200  )
 
+            ticker_data['_psar'] = _psar
+            ticker_data['_wrr']  = _wr
+
             ticker_data['stock_diff'] = stock_diff
             ticker_data['rsi_diff']   = rsi_diff
+
+
 
             #####  save data for today  #####
             file_dest = ticker_folder + '/' + today + '/' + 'data.json'
@@ -267,17 +271,44 @@ def main():
 
             #####  BUY  #####
 
+            # Load yesterday's json data
+            yesterdays_data = ticker_folder + '/' + yesterday + '/' + 'data.json'
+            #if not os.path.exists(yesterdays_data):
+                # [ ..... ]
+
+
+            #######################
+            #####  GOOD  BUY  #####
+            #######################
+
             # price > yesterday's price
             if ( _change > 0 ):
 
                 # EMA
-                if ( price > _ema10 ) and ( price > _ema20 ) and ( _ema10 > _ema20 ):
+                if ( price > _ema10 > _ema20 > _ema50 > _ema100 > _ema200):
 
-                    # CCI
-                    if ( _cci20 > 100 ) and (_cci201 < 100) and ( _cci20 > _cci201 ):
-                    # W%R
-                    #if (( _CCI20 > _CCI201 ) and ( _CCI20 > -20 ) and (_CCI201 < -20) ):
-                        print ("BUY")
+                    # MACD (12,26,9)
+                    if ( _macd_orange > _macd_blue ):
+
+                        # CCI (20) > 100
+                        if ( _cci20 > 100 ):
+
+                            # WR,14 > -20
+                            if ( _wr > -20 ):
+
+                                # RSI < 70 and going UP
+                                if ( _rsi < 70 ):
+                                    print ("BUY")
+
+            ##########################
+            #####  AWESOME  BUY  #####
+            ##########################
+
+
+            ##########################
+            #####  AMAZING  BUY  #####
+            ##########################
+
 
 
             #BUY_SIGS = round(json_analysis.summary['BUY'],0)
@@ -348,8 +379,8 @@ def main():
             #if (BUY_SIGS < SIGNALS_SELL) and (BUY_SIGS2 < SIGNALS_SELL) and (STOCH_DIFF < STOCH_SELL) and (RSI_DIFF < RSI_SELL) and (STOCH_K < STOCH_K1):
             #    print(f'\033[33mSignals RSI: {symbol} - Sell Signal Detected | {BUY_SIGS}_{BUY_SIGS2}/26')
 
-            #print(txcolors.NEUTRAL,'  {:8s}  {:10f}  ALL:{:25s} OSC:{:20s} {:35s}  {:10s}  '.format ( symbol, currentPrice, recommendation, osc_recommendation, osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
-            print('  {:6s}  {:6s}  {:10s}  OSC:{:23s} mAVE:{:30s}  {:30s}  {:15s}  '.format ( symbol, currentPrice_string , colorme ( recommendation ), colorme ( osc_recommendation ), colorme ( mave_recommendation ),
+            #print(txcolors.NEUTRAL,'  {:8s}  {:10f}  ALL:{:25s} OSC:{:20s} {:35s}  {:10s}  '.format ( symbol, price, recommendation, osc_recommendation, osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
+            print('  {:6s}  {:6s}  {:10s}  OSC:{:23s} mAVE:{:30s}  {:30s}  {:15s}  '.format ( symbol, price_string , colorme ( recommendation ), colorme ( osc_recommendation ), colorme ( mave_recommendation ),
                 osc_line, calculate_rsi( _rsi ) ),'',txcolors.ENDC)
             print('--------------------------------------------------------------------')
 
