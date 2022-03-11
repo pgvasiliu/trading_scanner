@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 from tradingview_ta import TA_Handler, Interval
 
 import colorama
-
+import argparse
 
 class txcolors:
     NEUTRAL = '\033[95m'
@@ -91,7 +91,7 @@ def calculate_rsi(p):
         r= "UNKNOWN"
     return r
 
-def main():
+def main(x):
     #keys = ['BUY','SELL','NEUTRAL']
 
     #Intervals = { Interval.INTERVAL_1_DAY,
@@ -111,7 +111,10 @@ def main():
     tt = datetime.today() - timedelta(days=1)
     yesterday = tt.strftime("%Y-%m-%d")
 
-    
+    # if today is Monday, we should access Fri's data not Sunday's
+    if (datetime.today().strftime('%A').lower()) == "monday":
+        tt = datetime.today() - timedelta(days=3)
+        yesterday = tt.strftime("%Y-%m-%d")
 
     homedir = os.path.expanduser("~")
     lockfile = homedir + '/.s.lock'
@@ -145,7 +148,7 @@ def main():
     tickers_exchange_json = {}
 
     # load the tickers json config file
-    with open('config_tickers.json') as f:
+    with open(x) as f:
         data = json.load(f)
         ticker_exchange = dict(sorted(data.items()))
 
@@ -153,7 +156,7 @@ def main():
         for symbol, exchange in ticker_exchange.items():
 
             # create folders and subfolders
-            ticker_folder = folder + '/' + symbol 
+            ticker_folder = folder + '/' + symbol + '_' + exchange
             try:
                 os.makedirs(ticker_folder + '/' + today, exist_ok=True)
                 os.makedirs(ticker_folder + '/' + yesterday, exist_ok=True)
@@ -401,7 +404,14 @@ def main():
 
 if __name__ == "__main__":
     try:
-        main()
+        parser = argparse.ArgumentParser()
+        parser.add_argument('files', nargs='+')
+
+        args=parser.parse_args()
+
+        ticker_files = sorted ( set (args.files) )
+        for myfile in ticker_files:
+            main(myfile)
 
     except KeyboardInterrupt:
         homedir = os.path.expanduser("~")
