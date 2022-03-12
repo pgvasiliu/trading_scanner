@@ -370,6 +370,15 @@ def main(x, upgrades):
             #####  AMAZING  BUY  #####
             ##########################
 
+            ######################
+            #####  DIP  BUY  #####
+            ######################
+            if ( _macd_orange < _macd_blue ) and ( _macd_orange < 0 ) and ( _macd_blue < 0 ):
+                if ( _cci20 > -80 ):
+                    if ( _wr < -65 ):
+                        if ( _rsi < 45 ):
+                            print ("Buy DIP")
+
 
 
             #BUY_SIGS = round(json_analysis.summary['BUY'],0)
