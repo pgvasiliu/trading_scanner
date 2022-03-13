@@ -291,6 +291,9 @@ def main(x, upgrades):
 
             _wr     = ind['W.R']
 
+            _mom    = ind['Mom']
+            _mom1   = ind['Mom[1]']
+
 
             stock_diff = round(_stock_k - _stock_d,2)
             rsi_diff   = round( _rsi - _rsi1,2)
@@ -305,6 +308,8 @@ def main(x, upgrades):
 
             ticker_data['_psar'] = _psar
             ticker_data['_wr']   = _wr
+
+            ticker_data['_mom'], ticker_data['_mom1'] = ( _mom, _mom1 )
 
             ticker_data['stock_diff'] = stock_diff
             ticker_data['rsi_diff']   = rsi_diff
