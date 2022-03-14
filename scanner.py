@@ -333,7 +333,10 @@ def main(x, upgrades):
             _wr1    = 0
 
             yesterdays_data = ticker_folder + '/' + yesterday + '/' + 'data.json'
+
             if (os.path.exists(yesterdays_data)) and (os.stat(yesterdays_data).st_size > 0):
+                lastModified    = datetime.fromtimestamp(os.stat(yesterdays_data).st_mtime).strftime('%Y-%m-%d')
+                #if (lastModified != yesterday):
                 with open(yesterdays_data) as yesterdays_json:
                     old_data = json.load(yesterdays_json)
                     if 'volume' in old_data:
@@ -356,16 +359,16 @@ def main(x, upgrades):
                 if ( price > _ema10 > _ema20 > _ema50 > _ema100 > _ema200):
 
                     # MACD (12,26,9)
-                    if ( _macd_orange > _macd_blue ):
+                    #if ( _macd_orange > _macd_blue ):
 
                         # CCI (20) > 100
-                        if ( _cci20 > 100 ):
+                        if ( _cci20 >= 100 ):
 
                             # WR,14 > -20
-                            if ( _wr > -20 ):
+                            if ( _wr >= -20 ):
 
                                 # RSI < 70 and going UP
-                                if ( _rsi < 70 ):
+                                if ( _rsi <= 70 ):
                                     print ("BUY")
 
             ##########################
@@ -381,9 +384,9 @@ def main(x, upgrades):
             #####  DIP  BUY  #####
             ######################
             if ( _macd_orange < _macd_blue ) and ( _macd_orange < 0 ) and ( _macd_blue < 0 ):
-                if ( _cci20 > -80 ):
-                    if ( _wr < -65 ):
-                        if ( _rsi < 45 ):
+                if ( _cci20 >= -80 ):
+                    if ( _wr <= -65 ):
+                        if ( _rsi <= 45 ):
                             print ("Buy DIP")
 
 
@@ -391,7 +394,7 @@ def main(x, upgrades):
             #####  SELL  #####
             ##################
             # stock going down after being overbought:   ( W%R < -20 = cross -20 from above ),  ( CCI20 < 100 = cross 100 from above ),  ( RSI < 70 = cross 70 from above )
-            if ( _cci20 < 100 ) and ( _cci201 > 100 ) and ( _cci20 < _cci201 ):
+            if ( _cci20 <= 100 ) and ( _cci201 > 100 ) and ( _cci20 < _cci201 ):
                 if ( _wr1 > -20 ) and ( _wr1 > _wr ) and (_wr < -20 ):
                     if ( _rsi1 > _rsi ) and ( _rsi1 > 70 ) and ( _rsi < 70 ):
                         print ("STRONG SELL !!!")
