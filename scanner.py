@@ -392,6 +392,11 @@ def main(x, upgrades):
                         if ( _rsi <= 45 ):
                             print ("Buy DIP")
 
+            if ( _macd_orange < _macd_blue ) and ( _macd_orange < 0 ) and ( _macd_blue < 0 ):
+                if ( _cci201 < -81 ) and ( _cci20 > -80 ):
+                    if ( _wr1 < -80 ) and ( _wr > -80 ):
+                        if ( _rsi > _rsi1 ):
+                            print ("Buy DIP 2")
 
             ##################
             #####  SELL  #####
