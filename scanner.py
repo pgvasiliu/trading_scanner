@@ -365,11 +365,14 @@ def main(x, upgrades):
                         if ( _cci20 >= 100 ):
 
                             # WR,14 > -20
+                            #if ( _wr1 < -20 )and ( _wr > -20 ):
                             if ( _wr >= -20 ):
 
-                                # RSI < 70 and going UP
-                                if ( _rsi <= 70 ):
-                                    print ("BUY")
+                                # RSI between 35 and 67
+                                if ( _rsi >= 35 ) and ( _rsi <= 67 ):
+                                    print ("BUY no stockastic")
+                                    if ( _stock_k - _stock_d >= 4.5 ):
+                                        print ("BUY w stockastic")
 
             ##########################
             #####  AWESOME  BUY  #####
@@ -395,6 +398,7 @@ def main(x, upgrades):
             ##################
             # stock going down after being overbought:   ( W%R < -20 = cross -20 from above ),  ( CCI20 < 100 = cross 100 from above ),  ( RSI < 70 = cross 70 from above )
             if ( _cci20 <= 100 ) and ( _cci201 > 100 ) and ( _cci20 < _cci201 ):
+                # IF PREV.W%R > [ - 80 ] AND CURRENT.W%R < [ - 80 ] ==> SELL SIGNAL
                 if ( _wr1 > -20 ) and ( _wr1 > _wr ) and (_wr < -20 ):
                     if ( _rsi1 > _rsi ) and ( _rsi1 > 70 ) and ( _rsi < 70 ):
                         print ("STRONG SELL !!!")
@@ -470,7 +474,7 @@ def main(x, upgrades):
 
             #print(txcolors.NEUTRAL,'  {:8s}  {:10f}  ALL:{:25s} OSC:{:20s} {:35s}  {:10s}  '.format ( symbol, price, recommendation, osc_recommendation, osc_line, calculate_rsi(RSI) ),'',txcolors.ENDC)
             #print(txcolors.NEUTRAL,'  {:8s}  {:10s}  {:25s}   {:20s}   {:40s})  {:30s}  {:15s}  \033[33m[{:15s}] '.format ( symbol, price_string , colorme ( recommendation ), 'OSC:' + colorme ( osc_recommendation ), 'mAVE:' + colorme ( mave_recommendation ),
-            print(txcolors.NEUTRAL,'  {:8s}  {:10s}   {:8s}%  {:25s}   {:20s}   {:40s}  {:30s}   \033[33m{:15s} '.format ( symbol, price_string , _change_2dec ,
+            print(txcolors.NEUTRAL,'  {:8s}  {:10s}   {:8s}%  {:25s}   {:20s}|   {:40s}  {:30s}   \033[33m{:15s} '.format ( symbol, price_string , _change_2dec ,
                 colorme ( recommendation ), 'OSC:' + colorme ( osc_recommendation ), 'mAVE:' + colorme ( mave_recommendation ),
                 osc_line,  upgrade_downgrade ),'',txcolors.ENDC)
             print('--------------------------------------------------------------------')
