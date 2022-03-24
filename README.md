@@ -57,5 +57,9 @@ $ ./scanner.py config_tickers_canada.json  config_tickers_us.json
 
 [ .... ]
 
+
+
+$ curl -L https://datahub.io/core/s-and-p-500-companies/r/0.csv -o /tmp/sp500.csv
+
 ```
 

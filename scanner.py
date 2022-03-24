@@ -324,13 +324,11 @@ def main(x, upgrades):
                 filehandle.write( json.dumps ( ticker_data, indent=4) + '\n')
 
 
-            #################
-            #####  BUY  #####
-            #################
-
             # Load yesterday's json data. TradingView API does not return yesterday's data for volume and W%R
-            volume1 = 0
-            _wr1    = 0
+            volume1       = 500
+            _wr1          = 500
+            _macd_blue1   = 500
+            _macd_orange1 = 500
 
             yesterdays_data = ticker_folder + '/' + yesterday + '/' + 'data.json'
 
@@ -339,13 +337,18 @@ def main(x, upgrades):
                 #if (lastModified != yesterday):
                 with open(yesterdays_data) as yesterdays_json:
                     old_data = json.load(yesterdays_json)
-                    if 'volume' in old_data:
-                        volume1 = old_data['volume']
-                    if '_wr' in old_data:
-                        _wr1    = old_data['_wr']
-                # [ ..... ]
-            # [ ..... ]
 
+                    if 'volume' in old_data:
+                        volume1        = old_data['volume']
+
+                    if '_wr' in old_data:
+                        _wr1           = old_data['_wr']
+
+                    if '_macd_blue' in old_data:
+                        _macd_blue1    = old_data['_macd_blue']
+
+                    if '_macd_orange' in old_data:
+                        _macd_orange1  = old_data['_macd_orange']
 
 
             #######################
@@ -356,7 +359,8 @@ def main(x, upgrades):
             if ( _change > 0 ):
 
                 # EMA
-                if ( price > _ema10 > _ema20 > _ema50 > _ema100 > _ema200):
+                #if ( price > _ema10 > _ema20 > _ema50 > _ema100 > _ema200):
+                if ( price > _ema10 ):
 
                     # MACD (12,26,9)
                     #if ( _macd_orange > _macd_blue ):
@@ -374,10 +378,27 @@ def main(x, upgrades):
                                     if ( _stock_k - _stock_d >= 4.5 ):
                                         print ("BUY w stockastic")
 
-            ##########################
-            #####  AWESOME  BUY  #####
-            ##########################
+            ########################
+            #####  EARLY  BUY  #####
+            ########################
+            # if yesterday < -80, and today crossing over > -80
+            if ( _wr1 != 500 ):
+                if ( _wr1 < -80 ) and ( _wr > -80 ) and ( _wr > _wr1 ):
+                    print ("BUY: EARLY ---> W%R cross -80 from below")
 
+            if ( _cci20 > _cci201 ) and ( _cci20 > -100 ) and ( _cci201 < -100 ):
+                print ("BUY: EARLY ---> CCI cross -100 from below")
+
+            if ( _rsi < 42 ) and ( _rsi > _rsi1 ):
+                print ("BUY: EARLY ---> RSI")
+
+            if ( _stock_k > _stock_d ) and ( _stock_k1 < _stock_d1 ) and ( _stock_k < 27):
+                print ("BUY: EARLY ---> STOCKASTIC CROSS")
+
+            # if yesterday's macd exists, look for a cross on the upside
+            if ( _macd_blue1 != 500):
+                if ( _macd_blue1 > _macd_orange1 ) and ( _macd_blue < _macd_orange ):
+                    print ("BUY: EARLY ---> MACD CROSS")
 
             ##########################
             #####  AMAZING  BUY  #####
@@ -390,13 +411,14 @@ def main(x, upgrades):
                 if ( _cci20 >= -80 ):
                     if ( _wr <= -65 ):
                         if ( _rsi <= 45 ):
-                            print ("Buy DIP")
+                            print ("BUY: DIP 1")
 
             if ( _macd_orange < _macd_blue ) and ( _macd_orange < 0 ) and ( _macd_blue < 0 ):
                 if ( _cci201 < -81 ) and ( _cci20 > -80 ):
                     if ( _wr1 < -80 ) and ( _wr > -80 ):
                         if ( _rsi > _rsi1 ):
-                            print ("Buy DIP 2")
+                            print ("BUY: DIP 2")
+
 
             ##################
             #####  SELL  #####
@@ -408,6 +430,9 @@ def main(x, upgrades):
                     if ( _rsi1 > _rsi ) and ( _rsi1 > 70 ) and ( _rsi < 70 ):
                         print ("STRONG SELL !!!")
 
+            if ( _wr1 != 500 ):
+                if ( _wr < _wr1 ) and ( _wr < -20 ) and ( _wr1 > -20 ):
+                    print ("SELL: CCI crossing -20 from above")
 
             #BUY_SIGS = round(json_analysis.summary['BUY'],0)
             #BUY_SIGS2 = round(json_analysis_15m.summary['BUY'],0)
@@ -484,7 +509,7 @@ def main(x, upgrades):
                 osc_line,  upgrade_downgrade ),'',txcolors.ENDC)
             print('--------------------------------------------------------------------')
 
-            time.sleep(1)
+            time.sleep(2)
             #sys.exit(0)
 
 
