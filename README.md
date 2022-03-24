@@ -58,6 +58,7 @@ BUY w stockastic
 --------------------------------------------------------------------
    ADBE      432.14       2.18    %  SELL               OSC:NEUTRAL |   mAVE:STRONG_SELL                 OSC:  MACD BUY,                  [3/24/2022,Maintains,Goldman Sachs 3/23/2022,Maintains,Oppenheimer 3/23/2022,Maintains,Jefferies 3/23/2022,Maintains,Deutsche Bank 3/23/2022,Maintains,Morgan Stanley ]   
 --------------------------------------------------------------------
+BUY: AMAZING: EMA10/EMA20 CROSS
    AMD       120.53       5.80    %  BUY                OSC:BUY     |   mAVE:STRONG_BUY                  OSC:  MACD BUY, Stoch.RSI SELL,   []                
 --------------------------------------------------------------------
 BUY no stockastic
@@ -140,6 +141,7 @@ BUY no stockastic
 --------------------------------------------------------------------
    SCHD      78.7         0.95    %  BUY                OSC:BUY     |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
 --------------------------------------------------------------------
+BUY: AMAZING: EMA10/EMA20 CROSS
    SHOP      705          0.20    %  NEUTRAL            OSC:BUY     |   mAVE:SELL                        OSC:  MACD BUY,                  []                
 --------------------------------------------------------------------
 BUY: EARLY ---> MACD CROSS

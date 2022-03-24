@@ -330,6 +330,10 @@ def main(x, upgrades):
             _macd_blue1   = 500
             _macd_orange1 = 500
 
+            _ema_91       = 500
+            _ema201       = 500
+
+
             yesterdays_data = ticker_folder + '/' + yesterday + '/' + 'data.json'
 
             if (os.path.exists(yesterdays_data)) and (os.stat(yesterdays_data).st_size > 0):
@@ -338,6 +342,8 @@ def main(x, upgrades):
                 with open(yesterdays_data) as yesterdays_json:
                     old_data = json.load(yesterdays_json)
 
+
+                    # grab yesterday's numbers
                     if 'volume' in old_data:
                         volume1        = old_data['volume']
 
@@ -350,6 +356,12 @@ def main(x, upgrades):
                     if '_macd_orange' in old_data:
                         _macd_orange1  = old_data['_macd_orange']
 
+                  
+                    if '_ema10' in old_data:
+                        _ema101        = old_data['_ema10'] 
+
+                    if '_ema20' in old_data:
+                        _ema201        = old_data['_ema20'] 
 
             #######################
             #####  GOOD  BUY  #####
@@ -403,6 +415,11 @@ def main(x, upgrades):
             ##########################
             #####  AMAZING  BUY  #####
             ##########################
+
+            # EMA 10 crossing EMA 20 from above. Very bulish!!
+            if ( _ema101 != 500):
+                if ( price > _ema10 ) and ( _ema10 > _ema20 ) and ( _ema201 > _ema101):
+                    print ("BUY: AMAZING: EMA10/EMA20 CROSS")
 
             ######################
             #####  DIP  BUY  #####
