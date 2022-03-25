@@ -1,23 +1,29 @@
 # trading_scanner
 
-INSTALL dependencies:
+## Install dependencies
+
+### Fedora
 
 ```bash
-dnf install python3-requests  python3-colorama python3-beautifulsoup4   # or pip3 install requests colorama beautifulsoup4
-pip3 install tradingview_ta
+$ dnf install python3-requests  python3-colorama python3-beautifulsoup4
+$ pip3 install tradingview_ta lxml
 ```
- 
 
-TODO:
-   * resistance / support levels
-   * earnings date
-   * TEMA ( 30 ) indicator. TradingView does not return TEMA via the API
-     so we are going to use yahoo to calculate tema.
-
-
+### Pip
 
 ```bash
+$ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta
+```
 
+## TODO
+
+- [ ] Resistance / support levels
+- [ ] Earnings date
+- [ ] TEMA ( 30 ) indicator. TradingView does not return TEMA via the API so we are going to use yahoo to calculate tema.
+
+## Example runs
+
+```bash
 $ ./scanner.py config_tickers_canada.json
 
 --------------------------------------------------------------------
@@ -50,9 +56,7 @@ SELL: CCI crossing -20 from above
 --------------------------------------------------------------------
 
 
-
 $ ./scanner.py config_tickers_us.json
-
 --------------------------------------------------------------------
 BUY no stockastic
 BUY w stockastic
@@ -194,4 +198,3 @@ BUY no stockastic
 $ curl -L https://datahub.io/core/s-and-p-500-companies/r/0.csv -o /tmp/sp500.csv
 
 ```
-
