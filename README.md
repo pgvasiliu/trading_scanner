@@ -11,10 +11,14 @@ pip3 install tradingview_ta
 TODO:
    * resistance / support levels
    * earnings date
+   * TEMA ( 30 ) indicator. TradingView does not return TEMA via the API
+     so we are going to use yahoo to calculate tema.
 
 
 
 ```bash
+
+$ ./scanner.py config_tickers_canada.json
 
 --------------------------------------------------------------------
    BCE       67.66        0.03    %  NEUTRAL            OSC:NEUTRAL         |   mAVE:NEUTRAL                     OSC:  W%R BUY, MACD SELL,        []                
@@ -185,12 +189,6 @@ BUY no stockastic
 --------------------------------------------------------------------
    XOM       83.38        0.30    %  BUY                OSC:SELL    |   mAVE:STRONG_BUY                  OSC:  MACD SELL,                 []                
 --------------------------------------------------------------------
-
-
-$ ./scanner.py config_tickers_canada.json  config_tickers_us.json
-
-[ .... ]
-
 
 
 $ curl -L https://datahub.io/core/s-and-p-500-companies/r/0.csv -o /tmp/sp500.csv
