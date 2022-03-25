@@ -356,12 +356,15 @@ def main(x, upgrades):
                     if '_macd_orange' in old_data:
                         _macd_orange1  = old_data['_macd_orange']
 
-                  
                     if '_ema10' in old_data:
-                        _ema101        = old_data['_ema10'] 
+                        _ema101        = old_data['_ema10']
+
+                    if '_ema50' in old_data:
+                        _ema51         = old_data['_ema50']
 
                     if '_ema20' in old_data:
-                        _ema201        = old_data['_ema20'] 
+                        _ema201        = old_data['_ema200']
+
 
             #######################
             #####  GOOD  BUY  #####
@@ -386,9 +389,9 @@ def main(x, upgrades):
 
                                 # RSI between 35 and 67
                                 if ( _rsi >= 35 ) and ( _rsi <= 67 ):
-                                    print ("BUY no stockastic")
+                                    print ("BUY: [%s] w/o stockastic" % ( symbol ) )
                                     if ( _stock_k - _stock_d >= 4.5 ):
-                                        print ("BUY w stockastic")
+                                        print ("BUY: [%s] w stockastic" % ( symbol ) )
 
             ########################
             #####  EARLY  BUY  #####
@@ -396,21 +399,21 @@ def main(x, upgrades):
             # if yesterday < -80, and today crossing over > -80
             if ( _wr1 != 500 ):
                 if ( _wr1 < -80 ) and ( _wr > -80 ) and ( _wr > _wr1 ):
-                    print ("BUY: EARLY ---> W%R cross -80 from below")
+                    print ("BUY: [%s] EARLY ---> W%R cross -80 from below" % ( symbol ) )
 
             if ( _cci20 > _cci201 ) and ( _cci20 > -100 ) and ( _cci201 < -100 ):
-                print ("BUY: EARLY ---> CCI cross -100 from below")
+                print ("BUY: [%s] EARLY ---> CCI cross -100 from below" % ( symbol ) )
 
             if ( _rsi < 42 ) and ( _rsi > _rsi1 ):
-                print ("BUY: EARLY ---> RSI")
+                print ("BUY: [%s] EARLY ---> RSI" % ( symbol ) )
 
             if ( _stock_k > _stock_d ) and ( _stock_k1 < _stock_d1 ) and ( _stock_k < 27):
-                print ("BUY: EARLY ---> STOCKASTIC CROSS")
+                print ("BUY: [%s] EARLY ---> STOCKASTIC CROSS" % ( symbol ) )
 
             # if yesterday's macd exists, look for a cross on the upside
             if ( _macd_blue1 != 500):
                 if ( _macd_blue1 > _macd_orange1 ) and ( _macd_blue < _macd_orange ):
-                    print ("BUY: EARLY ---> MACD CROSS")
+                    print ("BUY: [%s] EARLY ---> MACD CROSS" % ( symbol ) )
 
             ##########################
             #####  AMAZING  BUY  #####
@@ -419,7 +422,7 @@ def main(x, upgrades):
             # EMA 10 crossing EMA 20 from above. Very bulish!!
             if ( _ema101 != 500):
                 if ( price > _ema10 ) and ( _ema10 > _ema20 ) and ( _ema201 > _ema101):
-                    print ("BUY: AMAZING: EMA10/EMA20 CROSS")
+                    print ("BUY: [%s] AMAZING: EMA10/EMA20 CROSS FROM BELOW" % ( symbol ) )
 
             ######################
             #####  DIP  BUY  #####
@@ -437,6 +440,17 @@ def main(x, upgrades):
                             print ("BUY: DIP 2")
 
 
+            ###########################
+            #####  GOLDEN  CROSS  #####
+            ###########################
+            if ( _ema101 != 500):
+                # if yesterday ( EMA 50 < EMA 200 ) and today ( EMA 50 > 200 )
+                if ( _ema51 < _ema201 ) and ( _ema50 > _ema201 ):
+                    print ("BUY: [%s] GOLDEN CROSS EMA 50 crossing EMA 200 from below" % ( symbol ) )
+
+
+
+
             ##################
             #####  SELL  #####
             ##################
@@ -445,11 +459,27 @@ def main(x, upgrades):
                 # IF PREV.W%R > [ - 80 ] AND CURRENT.W%R < [ - 80 ] ==> SELL SIGNAL
                 if ( _wr1 > -20 ) and ( _wr1 > _wr ) and (_wr < -20 ):
                     if ( _rsi1 > _rsi ) and ( _rsi1 > 70 ) and ( _rsi < 70 ):
-                        print ("STRONG SELL !!!")
+                        print ("SELL STRONG: [%s]" % ( symbol ) )
 
             if ( _wr1 != 500 ):
                 if ( _wr < _wr1 ) and ( _wr < -20 ) and ( _wr1 > -20 ):
-                    print ("SELL: CCI crossing -20 from above")
+                    print ("SELL: [%s] CCI crossing -20 from above" % ( symbol ) )
+
+
+            if ( _ema101 != 500):
+                if ( price < _ema10 ) and ( _ema10 < _ema20 ) and ( _ema201 > _ema101):
+                    print ("SELL: [%s] FAST: EMA10/EMA20 CROSS FROM ABOVE" % ( symbol ) )
+
+
+
+            ##########################
+            #####  DEATH  CROSS  #####
+            ##########################
+            if ( _ema101 != 500):
+                # if yesterday's ( EMA 50 > EMA 200 ) and today ( EMA 50 < EMA 200 )
+                if ( _ema51 > _ema201 ) and ( _ema50 < _ema200 ):
+                    print ("SELL: [%s] DEATH CROSS EMA 50 crossing EMA 200 from above" % ( symbol ) )
+
 
             #BUY_SIGS = round(json_analysis.summary['BUY'],0)
             #BUY_SIGS2 = round(json_analysis_15m.summary['BUY'],0)
