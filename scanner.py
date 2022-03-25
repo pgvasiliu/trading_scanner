@@ -194,6 +194,8 @@ def main(x, upgrades):
         # loop through tickers
         for symbol, exchange in ticker_exchange.items():
 
+            advice = []
+
             upgrade_downgrade = '['
             for i in upgrades:
                 if i['ticker'] == symbol:
@@ -375,12 +377,16 @@ def main(x, upgrades):
 
             if ( _close > _open):
                 if ( _cci20 > _cci201 ) and ( _cci20 > 100 ) and ( _cci201 <= 100 ):
-                    print ("BUY: [%s] GOOD ---> CCI20 cross to upper level " % symbol )
+                    #print ("BUY: [%s] GOOD ---> CCI20 cross to upper level " % symbol )
+                    msg = "BUY: GOOD [CCI20 cross to upper level]"
+                    advice.append ( msg )
 
             if ( _close > _open):
                 if ( _wr1 != 500 ):
                     if ( _wr > _wr1 ) and ( _wr > -20 ) and ( _wr1 < -20 ):
-                        print ("BUY: [%s] GOOD ---> WR 14 cross to overbought " % symbol )
+                        #print ("BUY: [%s] GOOD ---> WR 14 cross to overbought " % symbol )
+                        msg = "BUY: GOOD [WR 14 cross to overbought]"
+                        advice.append ( msg )
 
             # price > yesterday's price
             if ( _change > 0 ):
@@ -401,9 +407,14 @@ def main(x, upgrades):
 
                                 # RSI between 35 and 67
                                 if ( _rsi >= 35 ) and ( _rsi <= 67 ):
-                                    print ( "BUY: [%s] w/o stockastic" % symbol )
+                                    #print ( "BUY: [%s] w/o stockastic" % symbol )
+                                    msg = "BUY: [w/o stockastic]"
+                                    advice.append ( msg )
+
                                     if ( _stock_k - _stock_d >= 4.5 ):
-                                        print ("BUY: [%s] w stockastic" % symbol )
+                                        #print ("BUY: [%s] w stockastic" % symbol )
+                                        msg = "BUY: [w stockastic]"
+                                        advice.append ( msg )
 
             ########################
             #####  EARLY  BUY  #####
@@ -411,21 +422,31 @@ def main(x, upgrades):
             # if yesterday < -80, and today crossing over > -80
             if ( _wr1 != 500 ):
                 if ( _wr1 < -80 ) and ( _wr > -80 ) and ( _wr > _wr1 ):
-                    print ("BUY: [%s] EARLY ---> WR cross -80 from below" % symbol )
+                    #print ("BUY: [%s] EARLY ---> WR cross -80 from below" % symbol )
+                    msg = "BUY: EARLY [WR cross -80 from below]"
+                    advice.append ( msg )
 
             if ( _cci20 > _cci201 ) and ( _cci20 > -100 ) and ( _cci201 < -100 ):
-                print ("BUY: [%s] EARLY ---> CCI cross -100 from below" % symbol )
+                #print ("BUY: [%s] EARLY ---> CCI cross -100 from below" % symbol )
+                msg = "BUY: EARLY [CCI cross -100 from below]"
+                advice.append ( msg )
 
             if ( _rsi < 42 ) and ( _rsi > _rsi1 ):
-                print ("BUY: [%s] EARLY ---> RSI" % ( symbol ) )
+                #print ("BUY: [%s] EARLY ---> RSI" % ( symbol ) )
+                msg = "BUY: EARLY [RSI going up]" 
+                advice.append ( msg )
 
             if ( _stock_k > _stock_d ) and ( _stock_k1 < _stock_d1 ) and ( _stock_k < 27):
-                print ("BUY: [%s] EARLY ---> STOCKASTIC CROSS" %  symbol )
+                #print ("BUY: [%s] EARLY ---> STOCKASTIC CROSS" %  symbol )
+                msg = "BUY: EARLY [STOCKASTIC CROSS]" 
+                advice.append ( msg )
 
             # if yesterday's macd exists, look for a cross on the upside
             if ( _macd_blue1 != 500):
                 if ( _macd_blue1 > _macd_orange1 ) and ( _macd_blue < _macd_orange ):
-                    print ("BUY: [%s] EARLY ---> MACD CROSS" % symbol )
+                    #print ("BUY: [%s] EARLY ---> MACD CROSS" % symbol )
+                    msg = "BUY: EARLY [MACD CROSS]" 
+                    advice.append ( msg )
 
             ##########################
             #####  AMAZING  BUY  #####
@@ -434,7 +455,9 @@ def main(x, upgrades):
             # EMA 10 crossing EMA 20 from above. Very bulish!!
             if ( _ema101 != 500):
                 if ( price > _ema10 ) and ( _ema10 > _ema20 ) and ( _ema201 > _ema101):
-                    print ("BUY: [%s] AMAZING: EMA10/EMA20 CROSS FROM BELOW" % symbol )
+                    #print ("BUY: [%s] AMAZING: EMA10/EMA20 CROSS FROM BELOW" % symbol )
+                    msg = "BUY: AMAZING [EMA10/EMA20 CROSS FROM BELOW]"
+                    advice.append ( msg )
 
             ######################
             #####  DIP  BUY  #####
@@ -443,13 +466,17 @@ def main(x, upgrades):
                 if ( _cci20 >= -80 ):
                     if ( _wr <= -65 ):
                         if ( _rsi <= 45 ):
-                            print ("BUY: DIP 1")
+                            #print ("BUY: [%s] DIP 1" % symbol)
+                            msg = "BUY: DIP [1]"
+                            advice.append ( msg )
 
             if ( _macd_orange < _macd_blue ) and ( _macd_orange < 0 ) and ( _macd_blue < 0 ):
                 if ( _cci201 < -81 ) and ( _cci20 > -80 ):
                     if ( _wr1 < -80 ) and ( _wr > -80 ):
                         if ( _rsi > _rsi1 ):
-                            print ("BUY: DIP 2")
+                            #print ("BUY: [%s] DIP 2" % symbol )
+                            msg = "BUY: [%s] DIP 2" % symbol
+                            advice.append ( msg )
 
 
             ###########################
@@ -458,8 +485,14 @@ def main(x, upgrades):
             if ( _ema101 != 500):
                 # if yesterday ( EMA 50 < EMA 200 ) and today ( EMA 50 > 200 )
                 if ( _ema51 < _ema201 ) and ( _ema50 > _ema201 ):
-                    print ("BUY: [%s] GOLDEN CROSS EMA 50 crossing EMA 200 from below" % ( symbol ) )
+                    #print ("BUY: [%s] GOLDEN CROSS EMA 50 crossing EMA 200 from below" % symbol )
+                    msg = "BUY: GOLDEN CROSS [EMA 50 crossing EMA 200 from below]"
+                    advice.append ( msg )
 
+            if (math.isclose( _ema50, _ema200, abs_tol = 0.08) == True) and ( _ema50 > _ema200 ):
+                #print ("BUY: [%s] GOLDEN CROSS soon 50, 200 EMA" % symbol )
+                msg = "BUY: GOLDEN CROSS [soon 50, 200 EMA]"
+                advice.append ( msg )
 
 
 
@@ -471,16 +504,22 @@ def main(x, upgrades):
                 # IF PREV.W%R > [ - 80 ] AND CURRENT.W%R < [ - 80 ] ==> SELL SIGNAL
                 if ( _wr1 > -20 ) and ( _wr1 > _wr ) and (_wr < -20 ):
                     if ( _rsi1 > _rsi ) and ( _rsi1 > 70 ) and ( _rsi < 70 ):
-                        print ("SELL STRONG: [%s]" % ( symbol ) )
+                        #print ("SELL STRONG: [%s]" % symbol )
+                        msg = "SELL STRONG [CCI, WR, RSI]"
+                        advice.append ( msg )
 
             if ( _wr1 != 500 ):
                 if ( _wr < _wr1 ) and ( _wr < -20 ) and ( _wr1 > -20 ):
-                    print ("SELL: [%s] CCI crossing -20 from above" % ( symbol ) )
+                    #print ("SELL: [%s] CCI crossing -20 from above" % symbol )
+                    msg = "SELL: [CCI crossing -20 from above]"
+                    advice.append ( msg )
 
 
             if ( _ema101 != 500):
                 if ( price < _ema10 ) and ( _ema10 < _ema20 ) and ( _ema201 > _ema101):
-                    print ("SELL: [%s] FAST: EMA10/EMA20 CROSS FROM ABOVE" % ( symbol ) )
+                    #print ("SELL FAST: [%s] EMA10/EMA20 CROSS FROM ABOVE" % ( symbol ) )
+                    msg = "SELL FAST: [%s] EMA10/EMA20 CROSS FROM ABOVE"
+                    advice.append ( msg )
 
 
 
@@ -490,7 +529,15 @@ def main(x, upgrades):
             if ( _ema101 != 500):
                 # if yesterday's ( EMA 50 > EMA 200 ) and today ( EMA 50 < EMA 200 )
                 if ( _ema51 > _ema201 ) and ( _ema50 < _ema200 ):
-                    print ("SELL: [%s] DEATH CROSS EMA 50 crossing EMA 200 from above" % ( symbol ) )
+                    #print ("SELL: [%s] DEATH CROSS EMA 50 crossing EMA 200 from above" % ( symbol ) )
+                    msg = "SELL: DEATH CROSS [EMA 50 crossing EMA 200 from above]"
+                    advice.append ( msg )
+
+
+            if (math.isclose( _ema50, _ema200, abs_tol = 0.08) == True) and ( _ema50 < _ema200 ):
+                #print ("SELL: [%s] BEAR CROSS soon 200, 50 EMA" % symbol)
+                msg = "SELL: BEAR CROSS [soon 200, 50 EMA]"
+                advice.append ( msg )
 
 
             #BUY_SIGS = round(json_analysis.summary['BUY'],0)
@@ -522,12 +569,6 @@ def main(x, upgrades):
             #RSI_SELL = -5 # Difference in RSI levels over last 2 timescales for a Sell Signal (-5)
             #STOCH_SELL = -10 # Difference between the Stoch D&K levels for a Sell Signal (-10)
             #SIGNALS_SELL = 7 # Max number of buy signals on both INTERVALs to add coin to sell list (7)
-
-
-            #if (math.isclose(_EMA50, _EMA200, abs_tol = 0.08) == True) and ( _EMA_50 > _EMA200 ):
-            #    print ("GOLDEN CROSS soon 20, 50 EMA")
-            #if (math.isclose(_EMA50, _EMA200, abs_tol = 0.08) == True) and ( _EMA_50 < _EMA200 ):
-            #    print ("BEAR CROSS soon 20, 50 EMA")
 
             #if (RSI < 80) and (BUY_SIGS >= 10) and (STOCH_DIFF >= 0.01) and (RSI_DIFF >= 0.01):
             #    print(f'{symbol} Signals OSC:  RSI:{RSI}/{RSI1} DIFF: {RSI_DIFF} | STOCH_K/D:{STOCH_K}/{STOCH_D} DIFF: {STOCH_DIFF} | BUYS: {BUY_SIGS}_{BUY_SIGS2}/26 | {oscCheck}-{maCheck}')
@@ -566,6 +607,12 @@ def main(x, upgrades):
             print(txcolors.NEUTRAL,'  {:8s}  {:10s}   {:8s}%  {:25s}   {:20s}|   {:40s}  {:30s}   \033[33m{:15s} '.format ( symbol, price_string , _change_2dec ,
                 colorme ( recommendation ), 'OSC:' + colorme ( osc_recommendation ), 'mAVE:' + colorme ( mave_recommendation ),
                 osc_line,  upgrade_downgrade ),'',txcolors.ENDC)
+
+            message = 9 * ' '
+            if ( len ( advice ) > 0):
+                message += symbol + ' # ' + ", ".join( advice )
+                print ( message )
+
             print('--------------------------------------------------------------------')
 
             time.sleep(2)
@@ -573,7 +620,7 @@ def main(x, upgrades):
 
 
     #####  BUY  list  #####
-    print ( buy_list )
+    #print ( buy_list )
 
 
     # Delete lock file before exit
