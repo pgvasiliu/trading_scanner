@@ -365,10 +365,17 @@ def main(x, upgrades):
                     if '_ema20' in old_data:
                         _ema201        = old_data['_ema200']
 
+                    if 'price' in old_data:
+                        price1         = old_data['price']
+
 
             #######################
             #####  GOOD  BUY  #####
             #######################
+
+            if ( _close > _open):
+                if ( _cci20 > _cci201 ) and ( _cci20 > 100 ) and ( _cci201 <= 100 ):
+                    print ("BUY: [%s] GOOD ---> CCI20 cross to upper level " % symbol )
 
             # price > yesterday's price
             if ( _change > 0 ):
