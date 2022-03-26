@@ -332,7 +332,7 @@ def main(x, upgrades):
             _macd_blue1   = 500
             _macd_orange1 = 500
 
-            _ema_91       = 500
+            _ema101       = 500
             _ema201       = 500
 
 
