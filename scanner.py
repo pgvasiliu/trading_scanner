@@ -413,6 +413,10 @@ def main(x, upgrades):
                         msg = "BUY: GOOD [WR 14 cross to overbought]"
                         advice.append ( msg )
 
+            # MOM indicator: crossing above 0 from below
+            if ( _mom1 < 0 ) and ( _mom > 0 ):
+                advice.append ( "SELL: GOOD [Mom cross above 0]")
+
             # price > yesterday's price
             if ( _change > 0 ):
 
@@ -473,7 +477,7 @@ def main(x, upgrades):
                     msg = "BUY: EARLY [MACD CROSS]"
                     advice.append ( msg )
 
-            # if previous AO < 0 and current AO > 0   ==> BUY signal
+            # AO oscillator: if previous AO < 0 and current AO > 0   ==> BUY signal
             if ( _ao1 < 0 ) and ( _ao > 0):
                 advice.append ( "BUY: EARLY [AO croosing to positive value]" )
 
@@ -538,12 +542,14 @@ def main(x, upgrades):
                         msg = "SELL STRONG [CCI, WR, RSI]"
                         advice.append ( msg )
 
+            # Williams % R indicator:
             if ( _wr1 != 500 ):
                 if ( _wr < _wr1 ) and ( _wr < -20 ) and ( _wr1 > -20 ):
                     #print ("SELL: [%s] CCI crossing -20 from above" % symbol )
                     msg = "SELL: [CCI crossing -20 from above]"
                     advice.append ( msg )
 
+            # Williams % R indicator:
             if ( _wr <= -80 ):
                 msg = "SELL: [WR is < or = to -80 lower level]"
                 advice.append ( msg )
@@ -552,21 +558,25 @@ def main(x, upgrades):
                         msg = "SELL FAST: [WR crossing -80 from above]"
                         advice.append ( msg )
 
+            # CCI indicator:
             if ( _cci20 <= -100 ):
                 msg = "SELL: [CCI20 %s is below -100. Could be a good DIP buy]" % _cci20
                 advice.append ( msg )
-                #
 
+            # EMA:
             if ( _ema101 != 500):
                 if ( price < _ema10 ) and ( _ema10 < _ema20 ) and ( _ema201 > _ema101):
                     #print ("SELL FAST: [%s] EMA10/EMA20 CROSS FROM ABOVE" % ( symbol ) )
                     msg = "SELL FAST: EMA10/EMA20 CROSS FROM ABOVE"
                     advice.append ( msg )
 
-            # if previous AO > 0 and current AO < 0   ==> BUY signal
+            # AO oscilator: if previous AO > 0 and current AO < 0   ==> BUY signal
             if ( _ao1 > 0 ) and ( _ao < 0):
                 advice.append ( "SELL: EARLY [AO croosing below 0 from above]" )
 
+            # MOM indicator:
+            if ( _mom1 > 0 ) and ( _mom < 0 ):
+                advice.append ( "SELL: [Mom cross below 0]")
 
             ##########################
             #####  DEATH  CROSS  #####
