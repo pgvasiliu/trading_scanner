@@ -22,6 +22,8 @@ import argparse
 from bs4 import BeautifulSoup
 import requests
 
+import pandas as pd
+import yfinance as yf
 
 def get_analysts_upgrades_downgrades_marketwatch():
     def add_data_to_dict(n_check, n_val, key, val, storage_dict):
@@ -212,7 +214,6 @@ def main(x, upgrades):
                 if errno.EEXIST != e.errno:
                     raise
 
-
             oscCheck = 0
             maCheck  = 0
             #trend    = 'UP'
@@ -314,9 +315,14 @@ def main(x, upgrades):
             ticker_data['_wr']   = _wr
 
             ticker_data['_mom'], ticker_data['_mom1'] = ( _mom, _mom1 )
+            ticker_data['_mom'], ticker_data['_mom1'] = ( _mom, _mom1 )
 
             ticker_data['stock_diff'] = stock_diff
             ticker_data['rsi_diff']   = rsi_diff
+
+
+            _ao, _ao1, _ao2                                              = ( ind['AO'], ind['AO[1]'], ind['AO[2]'] )
+            ticker_data['_ao'], ticker_data['_ao1'], ticker_data['_ao2'] = ( _ao, _ao1, _ao2 )
 
 
 
@@ -325,6 +331,25 @@ def main(x, upgrades):
             with open(file_dest, 'w') as filehandle:
                 filehandle.write( json.dumps ( ticker_data, indent=4) + '\n')
 
+            #PANDAS_PATH = ticker_folder + '/' + today + '/' + 'pandas.json'
+            #if os.path.exists(PANDAS_PATH):
+            #    with open(PANDAS_PATH) as f:
+            #        hist = pd.read_json(PANDAS_PATH)
+            #        #print (hist.tail(5))
+            #        data = hist[["Close"]]
+            #        data = data.rename(columns = {'Close':'Actual_Close'})
+            #        data["Target"] = hist.rolling(2).apply(lambda x: x.iloc[1] > x.iloc[0])["Close"]
+            #        # Shift stock prices forward one day, so we're predicting tomorrow's stock prices from today's prices.
+            #        prev = hist.copy()
+            #        prev = prev.shift(1)
+            #        predictors = ["Close", "Volume", "Open", "High", "Low"]
+            #        data = data.join(prev[predictors]).iloc[1:]
+            #        print ( data.tail() )
+            #
+            #else:
+            #    ti = yf.Ticker(symbol)
+            #    hist = ti.history(period="3mo")
+            #    hist.to_json(PANDAS_PATH)
 
             # Load yesterday's json data. TradingView API does not return yesterday's data for volume and W%R
             volume1       = 500
@@ -433,20 +458,25 @@ def main(x, upgrades):
 
             if ( _rsi < 42 ) and ( _rsi > _rsi1 ):
                 #print ("BUY: [%s] EARLY ---> RSI" % ( symbol ) )
-                msg = "BUY: EARLY [RSI going up]" 
+                msg = "BUY: EARLY [RSI going up]"
                 advice.append ( msg )
 
             if ( _stock_k > _stock_d ) and ( _stock_k1 < _stock_d1 ) and ( _stock_k < 27):
                 #print ("BUY: [%s] EARLY ---> STOCKASTIC CROSS" %  symbol )
-                msg = "BUY: EARLY [STOCKASTIC CROSS]" 
+                msg = "BUY: EARLY [STOCKASTIC CROSS]"
                 advice.append ( msg )
 
             # if yesterday's macd exists, look for a cross on the upside
             if ( _macd_blue1 != 500):
                 if ( _macd_blue1 > _macd_orange1 ) and ( _macd_blue < _macd_orange ):
                     #print ("BUY: [%s] EARLY ---> MACD CROSS" % symbol )
-                    msg = "BUY: EARLY [MACD CROSS]" 
+                    msg = "BUY: EARLY [MACD CROSS]"
                     advice.append ( msg )
+
+            # if previous AO < 0 and current AO > 0   ==> BUY signal
+            if ( _ao1 < 0 ) and ( _ao > 0):
+                advice.append ( "BUY: EARLY [AO croosing to positive value]" )
+
 
             ##########################
             #####  AMAZING  BUY  #####
@@ -514,13 +544,28 @@ def main(x, upgrades):
                     msg = "SELL: [CCI crossing -20 from above]"
                     advice.append ( msg )
 
+            if ( _wr <= -80 ):
+                msg = "SELL: [WR is < or = to -80 lower level]"
+                advice.append ( msg )
+                if ( _wr1 != 500 ):
+                    if ( _wr1 > _wr ) and ( _wr1 > -80 ):
+                        msg = "SELL FAST: [WR crossing -80 from above]"
+                        advice.append ( msg )
+
+            if ( _cci20 <= -100 ):
+                msg = "SELL: [CCI20 %s is below -100. Could be a good DIP buy]" % _cci20
+                advice.append ( msg )
+                #
 
             if ( _ema101 != 500):
                 if ( price < _ema10 ) and ( _ema10 < _ema20 ) and ( _ema201 > _ema101):
                     #print ("SELL FAST: [%s] EMA10/EMA20 CROSS FROM ABOVE" % ( symbol ) )
-                    msg = "SELL FAST: [%s] EMA10/EMA20 CROSS FROM ABOVE"
+                    msg = "SELL FAST: EMA10/EMA20 CROSS FROM ABOVE"
                     advice.append ( msg )
 
+            # if previous AO > 0 and current AO < 0   ==> BUY signal
+            if ( _ao1 > 0 ) and ( _ao < 0):
+                advice.append ( "SELL: EARLY [AO croosing below 0 from above]" )
 
 
             ##########################
