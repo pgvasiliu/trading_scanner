@@ -73,10 +73,18 @@ def colorme ( string ):
     if 'BUY' in string:
         out = '\033[92m' + string + '\033[0m'
         return out
+    if ',Upgrades,' in string:
+        out = '\033[92m' + string + '\033[0m'
+        return out
+
+
     if 'SELL' in string:
         out = '\033[91m' + string + '\033[0m'
         return out
     return string
+    if ',Downgrades,' in string:
+        out = '\033[91m' + string + '\033[0m'
+        return out
 
 #def convert_to_str(value):
 #    new_str = str(value)
@@ -661,7 +669,7 @@ def main(x, upgrades):
             #print(txcolors.NEUTRAL,'  {:8s}  {:10s}  {:25s}   {:20s}   {:40s})  {:30s}  {:15s}  \033[33m[{:15s}] '.format ( symbol, price_string , colorme ( recommendation ), 'OSC:' + colorme ( osc_recommendation ), 'mAVE:' + colorme ( mave_recommendation ),
             print(txcolors.NEUTRAL,'  {:8s}  {:10s}   {:8s}%  {:25s}   {:20s}|   {:40s}  {:30s}   \033[33m{:15s} '.format ( symbol, price_string , _change_2dec ,
                 colorme ( recommendation ), 'OSC:' + colorme ( osc_recommendation ), 'mAVE:' + colorme ( mave_recommendation ),
-                osc_line,  upgrade_downgrade ),'',txcolors.ENDC)
+                osc_line,  colorme ( upgrade_downgrade ) ),'',txcolors.ENDC)
 
             message = 9 * ' '
             if ( len ( advice ) > 0):
@@ -696,6 +704,7 @@ if __name__ == "__main__":
 
         ticker_files = sorted ( set (args.files) )
         for myfile in ticker_files:
+            print ("\n\n")
             print('--------------------------------------------------------------------')
             main(myfile, upgrades)
 
