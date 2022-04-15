@@ -5,14 +5,39 @@
 ### Fedora
 
 ```bash
-$ dnf install python3-requests  python3-colorama python3-beautifulsoup4
-$ pip3 install tradingview_ta lxml
+$ dnf install  python3-devel python3-pip  python3-requests  python3-colorama python3-beautifulsoup4 python3-pandas python3-pandas-datareader
+$ pip3 install tradingview_ta lxml pandas pandas-datareader
 ```
 
 ### Pip
 
 ```bash
-$ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta
+$ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta pandas pandas-datareader
+```
+
+### Advanced features
+```bash
+
+        1. Get build essentials
+
+        $ sudo dnf install python3-devel python3-pip python3-numpy python3-matplotlib python3-yfinance
+
+        2. Build TA-Lib
+
+        $ wget http://sourceforge.net/projects/ta-lib/files/ta-lib/0.4.0/ta-lib-0.4.0-src.tar.gz/download?use_mirror=iweb
+        $ tar zxfv ta-lib-0.4.0-src.tar.gz
+        $ cd ta-lib
+        $ ./configure --prefix=/usr
+        $ make
+        $ sudo make install
+
+        1.3 Install python wrapper
+
+        $ pip3 install --user Cython
+        $ pip3 install --user TA-Lib
+        $ pip3 install --user yahoo-fin
+        $ pip3 install --user mplfinance mpl-finance
+
 ```
 
 ## TODO
@@ -21,6 +46,7 @@ $ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta
 - [ ] Volume logic
 - [ ] Earnings date
 - [ ] TEMA ( 30 ) indicator. TradingView does not return TEMA via the API so we are going to use yahoo to calculate tema.
+- [ ] ATR stoploss/take profit
 
 ## Example runs
 
