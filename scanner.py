@@ -55,7 +55,7 @@ def sr ( name ):
     start = (dt.datetime.now()-dt.timedelta(days=365)).strftime('%Y-%m-%d')
 
     ticker = yf.Ticker(name)
-    df = ticker.history(start=start)
+    df = ticker.history(interval="1d", start=start)
 
     df['Date'] = pd.to_datetime(df.index)
     df['Date'] = df['Date'].apply(mpl_dates.date2num)
