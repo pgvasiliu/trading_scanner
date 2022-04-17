@@ -42,7 +42,7 @@ $ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta panda
 
 ## TODO
 
-- [ ] Resistance / support levels
+- [x] Resistance / support levels
 - [ ] Volume logic
 - [ ] Earnings date
 - [ ] TEMA ( 30 ) indicator. TradingView does not return TEMA via the API so we are going to use yahoo to calculate tema.
