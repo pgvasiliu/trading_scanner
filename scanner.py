@@ -80,7 +80,10 @@ def sr ( name ):
     for a, b in levels:
         b = "%.2f" % b 
         mylist.append ( b )
-    return sorted ( mylist )
+    sorted_float = sorted( mylist, key = lambda x:float(x))
+    #return sorted ( mylist )
+    #return mylist
+    return sorted_float
 
 
 def get_analysts_upgrades_downgrades_marketwatch():
@@ -213,13 +216,13 @@ def main(x, upgrades):
 
     #today    = datetime.today()
     today     = time.strftime("%Y-%m-%d")
-    tt = datetime.today() - timedelta(days=1)
-    yesterday = tt.strftime("%Y-%m-%d")
+
+    import datetime as dt
+    yesterday = (dt.datetime.now()-dt.timedelta(days=1)).strftime('%Y-%m-%d')
 
     # if today is Monday, we should access Fri's data not Sunday's
-    if (datetime.today().strftime('%A').lower()) == "monday":
-        tt = datetime.today() - timedelta(days=3)
-        yesterday = tt.strftime("%Y-%m-%d")
+    if (dt.datetime.today().strftime('%A').lower()) == "monday":
+        yesterday = (dt.datetime.now()-dt.timedelta(days=3)).strftime('%Y-%m-%d')
 
     homedir = os.path.expanduser("~")
     lockfile = homedir + '/.s.lock'
