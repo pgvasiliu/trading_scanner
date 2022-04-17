@@ -50,8 +50,12 @@ def sr ( name ):
     def isFarFromLevel(l):
         return np.sum([abs(l-x) < s  for x in levels]) == 0
 
+
+    import datetime as dt
+    start = (dt.datetime.now()-dt.timedelta(days=365)).strftime('%Y-%m-%d')
+
     ticker = yf.Ticker(name)
-    df = ticker.history(interval="1d",start="2021-04-01", end="2022-04-02")
+    df = ticker.history(start=start)
 
     df['Date'] = pd.to_datetime(df.index)
     df['Date'] = df['Date'].apply(mpl_dates.date2num)
