@@ -1,119 +1,28 @@
 #!/usr/bin/env python
 
+import argparse
+import json
 import math
 import os
+from   os.path import expanduser
 import sys
-import json
-import pprint
-import calendar
-
-from os.path import expanduser
-
 import time
-from datetime import datetime, timedelta
-
-#from tradingview_ta import TA_Handler#, Interval, Exchange
-from tradingview_ta import TA_Handler, Interval
-
-#import colorama
-import argparse
-
-
-from bs4 import BeautifulSoup
-import requests
-
-import pandas as pd
-import yfinance as yf
-
-
-import pandas as pd
-import numpy as np
-
-import matplotlib.dates as mpl_dates
-
 import warnings
 warnings.filterwarnings("ignore")
 
 
-def isSupport(df,i):
-    support = df['Low'][i] < df['Low'][i-1]  and df['Low'][i] < df['Low'][i+1] and df['Low'][i+1] < df['Low'][i+2] and df['Low'][i-1] < df['Low'][i-2]
-    return support
+from datetime import datetime, timedelta
 
-def isResistance(df,i):
-    resistance = df['High'][i] > df['High'][i-1]  and df['High'][i] > df['High'][i+1] and df['High'][i+1] > df['High'][i+2] and df['High'][i-1] > df['High'][i-2]
-    return resistance
+from tradingview_ta import TA_Handler, Interval, Exchange
 
 
-def sr ( name ):
-    mylist = []
+##############################
+#####  local filesystem  #####
+##############################
+from util.upgrade      import get_analysts_upgrades_downgrades_marketwatch
+from util.tradingview  import taJson
+from util.support      import isSupport, isResistance, sr
 
-    def isFarFromLevel(l):
-        return np.sum([abs(l-x) < s  for x in levels]) == 0
-
-
-    import datetime as dt
-    start = (dt.datetime.now()-dt.timedelta(days=365)).strftime('%Y-%m-%d')
-
-    ticker = yf.Ticker(name)
-    df = ticker.history(interval="1d", start=start)
-
-    df['Date'] = pd.to_datetime(df.index)
-    df['Date'] = df['Date'].apply(mpl_dates.date2num)
-    df = df.loc[:,['Date', 'Open', 'High', 'Low', 'Close']]
-
-    s =  np.mean(df['High'] - df['Low'])
-
-    levels = []
-    for i in range(2,df.shape[0]-2):
-        if isSupport(df,i):
-            l = df['Low'][i]
-
-            if isFarFromLevel(l):
-                levels.append((i,l))
-
-        elif isResistance(df,i):
-            l = df['High'][i]
-
-            if isFarFromLevel(l):
-                levels.append((i,l))
-
-    for a, b in levels:
-        b = "%.2f" % b 
-        mylist.append ( b )
-    sorted_float = sorted( mylist, key = lambda x:float(x))
-    #return sorted ( mylist )
-    #return mylist
-    return sorted_float
-
-
-def get_analysts_upgrades_downgrades_marketwatch():
-    def add_data_to_dict(n_check, n_val, key, val, storage_dict):
-
-        if n_val == n_check:
-            storage_dict[key] = val.string
-
-    url = "https://www.marketwatch.com/tools/upgrades-downgrades"
-    raw_page = requests.get(url)
-    soup = BeautifulSoup(raw_page.content, 'lxml')
-
-    table = soup.find('table')
-    raw_data_rows = table.find_all('tr')
-
-    row_text_data = list()
-
-    for tr in raw_data_rows[1:]:
-
-        data = dict()
-        for n, td in enumerate(tr):
-            add_data_to_dict(1, n, "date", td.string, data)
-            add_data_to_dict(3, n, "ticker", td.string, data)
-            add_data_to_dict(5, n, "company", td.string, data)
-            add_data_to_dict(7, n, "rating", td.string, data)
-            add_data_to_dict(9, n, "analyst", td.string, data)
-
-        row_text_data.append(data)
-
-    return row_text_data
 
 
 
@@ -147,38 +56,6 @@ def colorme ( string ):
         out = '\033[91m' + string + '\033[0m'
         return out
 
-#def convert_to_str(value):
-#    new_str = str(value)
-#    return new_string
-
-#def scan_combined(rsi_list, ema_list):
-#    for x in rsi_list:
-#        for i in ema_list:
-#            if (i.symbol == x.symbol):
-#                combined_list.append(i)
-
-
-def taJson(product, exch, myinterval):
-    p = product.replace('-', '')
-    if exch in [ "TSX", "TSE" ]:
-        screener = "canada"
-    else:
-        screener = "america"
-
-    ta = TA_Handler(
-        symbol=p,
-        screener=screener,
-        exchange=exch,
-        interval=myinterval
-    )
-    try:
-        analysis = ta.get_analysis()
-        return analysis
-    except Exception as e:
-        print(f'{SIGNAL_NAME}Exception:')
-        print(e)
-        sys.exit(1)
-
 
 #def calculate_rsi(p):
 #    if (p < 20 ):
@@ -208,7 +85,7 @@ def main(x, upgrades):
     #              Interval.INTERVAL_15_MINUTES
     #            }
 
-    interval = Interval.INTERVAL_1_DAY
+    #interval = Interval.INTERVAL_1_DAY
 
     buy_list, rsi_list, ema_list = ( [], [], [] )
     early_list = []
