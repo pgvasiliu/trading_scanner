@@ -5,7 +5,10 @@ import json
 import math
 import os
 from   os.path import expanduser
+
 import sys
+sys.path.insert(0, './util')
+
 import time
 import warnings
 warnings.filterwarnings("ignore")
@@ -22,8 +25,9 @@ from tradingview_ta import TA_Handler, Interval, Exchange
 from util.upgrade      import get_analysts_upgrades_downgrades_marketwatch
 from util.tradingview  import taJson
 from util.support      import isSupport, isResistance, sr
-
-
+from util.indicators   import SMA, WILLR, fib_retracement
+from util.yahoo        import download_yahoo
+from util.fibonacci    import fib_retracement, fib
 
 
 class txcolors:
@@ -306,6 +310,8 @@ def main(x, upgrades):
             _ema101       = 500
             _ema201       = 500
 
+
+            fibonacci     = fib ( symbol )
 
             yesterdays_data = ticker_folder + '/' + yesterday + '/' + 'data.json'
 
@@ -614,7 +620,8 @@ def main(x, upgrades):
                 message += symbol + ' # ' + ", ".join( advice )
                 print ( message )
 
-            print ( "             SR %s ---> %s" % ( symbol, sr ( symbol ) ) )
+            print ( "             SR   %s ---> %s" % ( symbol, sr ( symbol ) ) )
+            print ( "             FIB  %s ---> %s" % ( symbol, fibonacci ) )
             print('--------------------------------------------------------------------')
 
             time.sleep(2)
