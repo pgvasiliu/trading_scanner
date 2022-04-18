@@ -1,0 +1,16 @@
+beautifulsoup4
+bs4
+certifi>=2021
+colorama
+Cython
+lxml>=4.5.1
+mpl-finance
+mplfinance
+numpy
+pandas
+pandas-datareader
+requests>=2.26
+tradingview_ta
+yahoo-fin
+yfinance
+wpr

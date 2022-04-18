@@ -12,32 +12,37 @@ $ pip3 install tradingview_ta lxml pandas pandas-datareader
 ### Pip
 
 ```bash
-$ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta pandas pandas-datareader
+$ pip3 install -r requirements.txt
 ```
 
-### Advanced features
+### Building TA-Lib package
+
+To use the TA-Lib python pip package you would need the [previous 0.4.0](https://github.com/mrjbq7/ta-lib#dependencies) library first
+
+**Get build essentials**
+
 ```bash
+$ sudo dnf install python3-devel python3-pip python3-numpy python3-matplotlib python3-yfinance
+```
 
-        1. Get build essentials
+**Build TA-Lib**
 
-        $ sudo dnf install python3-devel python3-pip python3-numpy python3-matplotlib python3-yfinance
+```bash
+$ wget http://sourceforge.net/projects/ta-lib/files/ta-lib/0.4.0/ta-lib-0.4.0-src.tar.gz/download?use_mirror=iweb
+$ tar zxfv ta-lib-0.4.0-src.tar.gz
+$ cd ta-lib
+$ ./configure --prefix=/usr
+$ make
+$ sudo make install
+```
 
-        2. Build TA-Lib
+**Install python wrappers**
 
-        $ wget http://sourceforge.net/projects/ta-lib/files/ta-lib/0.4.0/ta-lib-0.4.0-src.tar.gz/download?use_mirror=iweb
-        $ tar zxfv ta-lib-0.4.0-src.tar.gz
-        $ cd ta-lib
-        $ ./configure --prefix=/usr
-        $ make
-        $ sudo make install
-
-        1.3 Install python wrapper
-
-        $ pip3 install --user Cython
-        $ pip3 install --user TA-Lib
-        $ pip3 install --user yahoo-fin
-        $ pip3 install --user mplfinance mpl-finance
-
+```bash
+$ pip3 install --user Cython
+$ pip3 install --user TA-Lib
+$ pip3 install --user yahoo-fin
+$ pip3 install --user mplfinance mpl-finance
 ```
 
 ## TODO
