@@ -47,7 +47,7 @@ $ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta panda
 - [x] Earnings date
 - [x] Fibonnacci levels
 - [ ] Volume logic
-- [ ] TEMA ( 30 ) indicator. TradingView does not return TEMA via the API so we are going to use yahoo to calculate tema.
+- [x] TEMA ( 30 ) indicator. TradingView does not return TEMA via the API so we are going to use yahoo to calculate tema.
 - [ ] Strategies and backtesting
 
 ## Example runs

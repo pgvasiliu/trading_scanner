@@ -100,10 +100,18 @@ def WMA(close, t):
 #    ema_val = ema(close, t)
 #    return 2 * ema_val - ema(ema_val, t)
 
-def TEMA ( close, t ):
-    import numpy as np
-    ema_val = EMA (close, t)
-    return 3 * (ema_val - EMA ( ema_val, t)) + EMA( EMA( ema_val, t), t)
+#def TEMA ( close, t ):
+#    import numpy as np
+#    ema_val = EMA (close, t)
+#    return 3 * (ema_val - EMA ( ema_val, t)) + EMA( EMA( ema_val, t), t)
+
+def TEMA ( df, t=30 ):
+    ema1 = df['Close'].ewm(span = t ,adjust = False).mean()
+    ema2 = ema1.ewm(span = t ,adjust = False).mean()
+    ema3 = ema2.ewm(span = t ,adjust = False).mean()
+
+    #stock[f'TEMA{span}'] = (3*ema1)-(3*ema2) + ema3
+    return (3*ema1)-(3*ema2) + ema3
 
 
 #################
@@ -226,23 +234,28 @@ def RMA(close, t):
 #    import numpy as np
 #    return talib.EMA ( np.array(close), t)
 
-#EMA Starts Here
-def EMA(close, t):
-    sma= 0.0
-    n = len(close)
-    for i in range(t):
-        sma += close[i]
-    sma = sma/(t)
-    ema = []
-    for j in range(t-1):
-        ema.append(-1)
-    ema.append(sma)
-    m = 2/(t+1)
-    for i in range(t,n):
-        e = close[i]*m + ema[i-1]*(1-m)
-        ema.append(e)
-    return ema
-#EMA ends here
+def EMA ( df, t=9 ):
+    ema = df['Close'].ewm(span = t ,adjust = False).mean()
+    return ( ema )
+
+
+##EMA Starts Here
+#def EMA(close, t):
+#    sma= 0.0
+#    n = len(close)
+#    for i in range(t):
+#        sma += close[i]
+#    sma = sma/(t)
+#    ema = []
+#    for j in range(t-1):
+#        ema.append(-1)
+#    ema.append(sma)
+#    m = 2/(t+1)
+#    for i in range(t,n):
+#        e = close[i]*m + ema[i-1]*(1-m)
+#        ema.append(e)
+#    return ema
+##EMA ends here
 
 # Rate Of Change(ROC) Starts here
 #def ROC ( data, t=10):

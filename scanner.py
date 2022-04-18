@@ -313,6 +313,21 @@ def main(x, upgrades):
             _ema201       = 500
 
 
+            ##########################
+            #####  PANDAS  data  #####
+            ##########################
+            df            = download_yahoo ( symbol )
+
+
+            df['TEMA_30'] = TEMA ( df, 30 )
+            tema_30       = df['TEMA_30'][-1]
+            tema_301      = df['TEMA_30'][-2]
+
+
+            df['EMA_9']   = EMA ( df, 9 )
+            ema_9         = df['EMA_9'][-1]
+            ema_91        = df['EMA_9'][-2]
+
             ####################################
             #####  FIBONACCI  retracement  #####
             ####################################
@@ -322,11 +337,14 @@ def main(x, upgrades):
             ###################################
             #####  ATR bands ( Keltner )  #####
             ###################################
-            atr_band_lower, atr_band_higher = ATR_bands ( download_yahoo ( symbol ) )
+            atr_band_lower, atr_band_higher = ATR_bands ( df, 14 )
 
 
 
 
+            #####  // TEMA 30 strategy // #####
+            if ( price > tema_30 ) and ( price > ema_9 ) and ( ema_9 > tema_30):
+                print ( "TEMA , EMA 9 BUY" )
 
 
 
