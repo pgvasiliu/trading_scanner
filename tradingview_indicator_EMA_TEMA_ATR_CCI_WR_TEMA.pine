@@ -1,0 +1,93 @@
+//@version=5
+////////////////////////////////////////////////////////////
+//  Copyright by em26jamie (via HPotter) 10/3/18
+// This study plots the TEMA indicator. TEMA ia s triple MA (Moving Average),
+// and is calculated as 3*MA - (3*MA(MA)) + (MA(MA(MA)))
+////////////////////////////////////////////////////////////
+indicator(title='TEMA + 9 EMA + ATR+ CCI + WR', shorttitle='TEMA + 9 EMA + ATR + CCI + WR', overlay=true)
+Length = input.int(30, 'TEMA Length', minval=1)
+
+xPrice = close
+xEMA1 = ta.ema(xPrice, Length)
+xEMA2 = ta.ema(xEMA1, Length)
+xEMA3 = ta.ema(xEMA2, Length)
+nRes = 3 * xEMA1 - 3 * xEMA2 + xEMA3
+plot(nRes, color=color.new(color.blue, 0), linewidth=3, title='TEMA')
+
+// SMA 5 and SMA 8
+sma5_len=input.int(5, title="SMA 5")
+sma8_len=input.int(8, title="SMA 8")
+sma5=ta.sma(close,sma5_len)
+sma8=ta.sma(close,sma8_len)
+plot(sma5, color=color.new(color.white, 0), linewidth=1, title='SMA 5')
+plot(sma8, color=color.new(color.white, 0), linewidth=1, title='SMA 8')
+
+
+
+i9 = input.int(9, 'Ema 9', minval=1)
+ema9 = ta.ema(close, i9)
+
+i20 = input.int(20, 'Ema 20', minval=1)
+ema20 = ta.ema(close, i20)
+
+i50 = input.int(50, 'Ema 50', minval=1)
+ema50 = ta.ema(close, i50)
+
+i100 = input.int(100, 'Ema 100', minval=1)
+ema100 = ta.ema(close, i100)
+
+i200 = input.int(200, 'Ema 200', minval=1)
+ema200 = ta.ema(close, i200)
+
+
+plot(ema9, color=color.new(color.lime, 0), linewidth=1, title='EMA 9')
+plot(ema20, color=color.new(color.red, 0), linewidth=1, title='EMA 20')
+plot(ema50, color=color.new(color.yellow, 0), linewidth=1, title='EMA 50')
+plot(ema100, color=color.new(color.teal, 0), linewidth=1, title='EMA 100')
+plot(ema200, color=color.new(color.black, 0), linewidth=1, title='EMA 200')
+
+//background for ema 9, 20 cross
+bgcolor(color=ta.cross(ema9, ema20) ? color.black : na, transp=90)
+
+// blue cross
+plot(ta.cross(ema9, ema20) ? ema9 : na, style=plot.style_cross, linewidth=4)
+
+// ATR bands
+lengthatr = input.int(14, minval=1)
+price = input(close)
+lengthbasis = input(20, title='Length of Mid Band')
+basis = ta.ema(close, lengthbasis)
+mult = input(2, title='MULT for ATR')
+atr = ta.atr(lengthatr)
+upper = basis + mult * atr
+lower = basis - mult * atr
+p1 = plot(upper, color=color.new(color.blue, 0))
+p2 = plot(lower, color=color.new(color.blue, 0))
+fill(p1, p2, transp=90)
+
+
+//CCI Crossover Alert
+//This script is for the CCI crossover
+ccicurrent = ta.cci(close[0], 20)
+cciprevious = ta.cci(close[1], 20)
+bgcolor(ccicurrent < 100 and cciprevious > 100 ? color.orange : na, title='CCI Down', transp=90)
+bgcolor(ccicurrent > -100 and cciprevious < -100 ? color.green : na, title='CCI Up', transp=90)
+
+
+//Williams %R
+wpr = ta.wpr(14)
+
+color textColor = color.white
+color sellColor = color.red
+color buyColor = color.green
+// Buy If price currently lower than MA substracts by ATR (with some multiplier)
+// To reduce the false signal, check the William %R value and should be on the oversold area and previously reach < -95
+if basis - (mult * atr) > open and wpr < -80 and wpr[1] < -95 and close > open
+    label.new(bar_index, low, text = "WR", color= buyColor, textcolor=textColor, style = label.style_label_up)
+    
+// Sell If price currently higher than MA add by ATR (with some multiplier)
+// To reduce the false signal, check the William %R value and should be on the overbought area and previously reach > -5
+if basis + (mult * atr) < close and wpr > -20 and wpr[1] > -5
+    label.new(bar_index, high, text = "WR", color= sellColor, textcolor=textColor)
+    
+
