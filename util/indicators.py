@@ -25,18 +25,16 @@ def SMA(close, t):
 #########################
 #####  WILLIAMS %R  #####
 #########################
-#def WILLR ( high, low, close, t=14):
-#    import talib
-#    return  talib.WILLR ( h, l, c, t)
-
 #def WILLR( data, t=14):
-#  return talib.WILLR ( data['High'], data['Low'], data['Close'], timeperiod=t)
+#    import talib
+#    return talib.WILLR ( data['High'], data['Low'], data['Close'], timeperiod=t)
 
-
+#
 def WILLR (high, low, close, t):
-    import pandas
-    import numpy
+    import pandas as pd
+    import numpy as np
     import math
+
     highh = high.rolling(t).max()
     lowl = low.rolling(t).min()
     wr = -100 * ((highh - close) / (highh - lowl))

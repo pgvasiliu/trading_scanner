@@ -318,15 +318,40 @@ def main(x, upgrades):
             ##########################
             df            = download_yahoo ( symbol )
 
-
+            #####################
+            #####  TEMA 30  #####
+            #####################
             df['TEMA_30'] = TEMA ( df, 30 )
             tema_30       = df['TEMA_30'][-1]
             tema_301      = df['TEMA_30'][-2]
 
 
+            ##################
+            #####  EMA 9 #####
+            ##################
             df['EMA_9']   = EMA ( df, 9 )
             ema_9         = df['EMA_9'][-1]
             ema_91        = df['EMA_9'][-2]
+
+
+            ####################
+            #####  ATR 14  #####
+            ####################
+            df['ATR_14']  = ATR ( df, 14 )
+            atr_14        = df['ATR_14'][-1]
+            atr_141       = df['ATR_14'][-2]
+
+
+            #################
+            #####  W%R  #####
+            #################
+            df['WILLR_14'] = WILLR ( df['High'], df['Low'], df['Close'], 14 )
+            #df['WILLR_14'] = WILLR ( df, 14 )
+            willr_14       = df['WILLR_14'][-1]
+            willr_141      = df['WILLR_14'][-2]
+
+
+            #print ( df.tail() )
 
             ####################################
             #####  FIBONACCI  retracement  #####
@@ -345,6 +370,17 @@ def main(x, upgrades):
             #####  // TEMA 30 strategy // #####
             if ( price > tema_30 ) and ( price > ema_9 ) and ( ema_9 > tema_30):
                 print ( "TEMA , EMA 9 BUY" )
+
+            # Buy If price currently lower than MA substracts by ATR (with some multiplier)
+            # To reduce the false signal, check the William %R value and should be on the oversold area and previously reach < -95
+            if ( ema_9 - ( 2 * atr_14) > _open ) and ( wpr < -80) and ( willr_141 < -95 ) and ( _close > _open ):
+                print ( "TV BUY" )
+
+            # Sell If price currently higher than MA add by ATR (with some multiplier)
+            # To reduce the false signal, check the William %R value and should be on the overbought area and previously reach > -5
+            if ( ema_9 + ( 2 * atr_14) < _close ) and ( wpr > -20 ) and ( willr_141 > -5 ):
+                print ( "TV SELL" )
+
 
 
 
