@@ -25,7 +25,9 @@ from tradingview_ta import TA_Handler, Interval, Exchange
 from util.upgrade      import get_analysts_upgrades_downgrades_marketwatch
 from util.tradingview  import taJson
 from util.support      import isSupport, isResistance, sr
-from util.indicators   import SMA, WILLR, fib_retracement
+
+from util.indicators   import SMA, WILLR, WMA, TEMA, RSI, RMA, EMA, ROC, wwma, ATR, ATR_bands
+
 from util.yahoo        import download_yahoo
 from util.fibonacci    import fib_retracement, fib
 
@@ -311,7 +313,22 @@ def main(x, upgrades):
             _ema201       = 500
 
 
+            ####################################
+            #####  FIBONACCI  retracement  #####
+            ####################################
             fibonacci     = fib ( symbol )
+
+
+            ###################################
+            #####  ATR bands ( Keltner )  #####
+            ###################################
+            atr_band_lower, atr_band_higher = ATR_bands ( download_yahoo ( symbol ) )
+
+
+
+
+
+
 
             yesterdays_data = ticker_folder + '/' + yesterday + '/' + 'data.json'
 
@@ -620,8 +637,9 @@ def main(x, upgrades):
                 message += symbol + ' # ' + ", ".join( advice )
                 print ( message )
 
-            print ( "             SR   %s ---> %s" % ( symbol, sr ( symbol ) ) )
-            print ( "             FIB  %s ---> %s" % ( symbol, fibonacci ) )
+            print ( "             SupRes   [%s] ---> %s" % ( symbol, sr ( symbol ) ) )
+            print ( "             Fibona   [%s] ---> %s" % ( symbol, fibonacci ) )
+            print ( "             ATR_band [%s] ---> (%.2f) %s  (%.2f)" % ( symbol, atr_band_lower, price_string, atr_band_higher ) )
             print('--------------------------------------------------------------------')
 
             time.sleep(2)

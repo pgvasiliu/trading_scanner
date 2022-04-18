@@ -45,9 +45,10 @@ $ pip3 install --user lxml requests colorama beautifulsoup4 tradingview_ta panda
 - [x] Resistance / support levels
 - [x] ATR bands ( a.k.a. Keltner channel = stop loss/take profit )
 - [x] Earnings date
-- [ ] Fibonnacci levels
+- [x] Fibonnacci levels
 - [ ] Volume logic
 - [ ] TEMA ( 30 ) indicator. TradingView does not return TEMA via the API so we are going to use yahoo to calculate tema.
+- [ ] Strategies and backtesting
 
 ## Example runs
 
@@ -106,63 +107,24 @@ $ ./scanner.py config_tickers_canada.json
 
 $ ./scanner.py tickers/sectors/energy.json
 --------------------------------------------------------------------
-   BP        31.05        1.01    %  BUY                OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
-         BP # BUY: [w/o stockastic]
+   APA       43.68        0.16    %  BUY                OSC:SELL   |   mAVE:STRONG_BUY                  OSC:  W%R SELL, MACD SELL,       []                
+         APA # BUY: [w/o stockastic], BUY: [w stockastic]
+             SupRes   [APA] ---> ['16.15', '18.41', '19.67', '21.09', '22.44', '23.65', '25.17', '28.67', '31.02', '32.32', '34.27', '36.46', '38.52', '43.88']
+             Fibona   [APA] ---> {'0': '15.90', '0.236': '22.46', '0.382': '26.51', '0.5': '29.79', '0.618': '33.07', '0.786': '37.74', '1': '43.68', '1.618': '60.85', '2.618': '88.63', '3.618': '116.40', '4.236': '133.57'}
+             ATR_band [APA] ---> (37.36) 43.68  (45.12)
 --------------------------------------------------------------------
-   BTU       25.95        2.77    %  BUY                OSC:NEUTRAL|   mAVE:STRONG_BUY                  OSC:  W%R SELL, MACD BUY,        []                
-         BTU # BUY: [w/o stockastic], BUY: [w stockastic]
+   BKR       37.29        0.19    %  STRONG_BUY         OSC:NEUTRAL|   mAVE:STRONG_BUY                  OSC:  MACD SELL,                 []                
+         BKR # SELL: GOOD [Mom cross above 0]
+             SupRes   [BKR] ---> ['18.20', '22.86', '24.57', '25.79', '27.27', '29.28', '32.58', '35.08', '38.41', '39.78']
+             Fibona   [BKR] ---> {'0': '18.94', '0.236': '23.61', '0.382': '26.50', '0.5': '28.83', '0.618': '31.16', '0.786': '34.49', '1': '38.72', '1.618': '50.94', '2.618': '70.72', '3.618': '90.50', '4.236': '102.73'}
+             ATR_band [BKR] ---> (33.39) 37.29  (39.03)
 --------------------------------------------------------------------
-   COP       107.5        2.83    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
+   BP        31.29        0.26    %  BUY                OSC:NEUTRAL|   mAVE:STRONG_BUY                  OSC:  W%R SELL, CCI SELL, MACD BUY,   []                
+         BP # BUY: [w/o stockastic], BUY: [w stockastic]
+             SupRes   [BP] ---> ['23.13', '24.22', '26.16', '26.93', '27.96', '28.60', '29.64', '30.34', '31.24']
+             Fibona   [BP] ---> {'0': '22.31', '0.236': '24.83', '0.382': '26.39', '0.5': '27.66', '0.618': '28.92', '0.786': '30.71', '1': '33.00', '1.618': '39.61', '2.618': '50.31', '3.618': '61.01', '4.236': '67.62'}
+             ATR_band [BP] ---> (28.58) 31.29  (31.71)
 --------------------------------------------------------------------
-   CVX       169.31       1.81    %  BUY                OSC:NEUTRAL         |   mAVE:STRONG_BUY                  OSC:  MACD SELL,                 []                
---------------------------------------------------------------------
-   DVN       62.5         1.56    %  BUY                OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
-         DVN # BUY: [w/o stockastic]
---------------------------------------------------------------------
-   EOG       124.51       2.89    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  [3/24/2022,Downgrades,TD Securities ]   
-         EOG # BUY: GOOD [WR 14 cross to overbought], BUY: [w/o stockastic]
---------------------------------------------------------------------
-   EXC       45.51        2.34    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
-         EXC # BUY: EARLY [MACD CROSS]
---------------------------------------------------------------------
-   HAL       21.91        0.97    %  BUY                OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
---------------------------------------------------------------------
-   LNG       149.3        5.46    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
---------------------------------------------------------------------
-   MGY       25.44        4.26    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
---------------------------------------------------------------------
-   MPC       6.92         -2.12   %  SELL               OSC:SELL   |   mAVE:SELL                        OSC:  MACD SELL,                 []                
---------------------------------------------------------------------
-   MRO       26.04        2.00    %  BUY                OSC:NEUTRAL|   mAVE:STRONG_BUY                  OSC:  CCI SELL, MACD BUY,        []                
---------------------------------------------------------------------
-   MUR       43.15        3.83    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  CCI SELL, MACD BUY,        []                
---------------------------------------------------------------------
-   NOG       29.36        5.65    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  [3/25/2022,Maintains,Raymond James ]   
---------------------------------------------------------------------
-   OXY       58.71        1.66    %  BUY                OSC:NEUTRAL|   mAVE:STRONG_BUY                  OSC:  MACD SELL,                 []                
---------------------------------------------------------------------
-   RIG       5.03         13.54   %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
---------------------------------------------------------------------
-   SLB       43.68        2.44    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
---------------------------------------------------------------------
-   SM        42.48        6.71    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
-         SM # BUY: GOOD [CCI20 cross to upper level], BUY: [w/o stockastic], BUY: [w stockastic]
---------------------------------------------------------------------
-   USO       80.74        1.24    %  BUY                OSC:NEUTRAL|   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
---------------------------------------------------------------------
-   VDE       110.55       2.64    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
-         VDE # BUY: GOOD [CCI20 cross to upper level]
---------------------------------------------------------------------
-   VLO       97.25        0.84    %  BUY                OSC:NEUTRAL|   mAVE:STRONG_BUY                  OSC:  CCI SELL, MACD BUY,        []                
-         VLO # BUY: [w/o stockastic]
---------------------------------------------------------------------
-   XLE       78.75        2.19    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
-         XLE # BUY: GOOD [CCI20 cross to upper level], BUY: GOOD [WR 14 cross to overbought], BUY: [w/o stockastic], BUY: [w stockastic], BUY: EARLY [MACD CROSS]
---------------------------------------------------------------------
-   XOM       85.2         2.18    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []                
-         XOM # BUY: EARLY [MACD CROSS]
---------------------------------------------------------------------
-   XOP       138.6        4.75    %  STRONG_BUY         OSC:BUY    |   mAVE:STRONG_BUY                  OSC:  MACD BUY,                  []
 
 
 $ ./get_market_exchange.py HAL BTU SLB XLE MRO OXY VDE RIG SM NOG LNG XOP  MGY MUR XOM CVX HAL COP EOG EXC DVN BP VLO USO MPC APA BKR
