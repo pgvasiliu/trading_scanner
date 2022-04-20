@@ -316,6 +316,7 @@ def main(x, upgrades):
             ##########################
             #####  PANDAS  data  #####
             ##########################
+            symbol = symbol.replace ( '.', '-' )
             df            = download_yahoo ( symbol )
 
             #####################
@@ -693,7 +694,7 @@ def main(x, upgrades):
 
             print ( "             SupRes   [%s] ---> %s" % ( symbol, sr ( symbol ) ) )
             print ( "             Fibona   [%s] ---> %s" % ( symbol, fibonacci ) )
-            print ( "             ATR_band [%s] ---> (%.2f) %s  (%.2f)" % ( symbol, atr_band_lower, price_string, atr_band_higher ) )
+            print ( "             ATR_band [%s] ---> (LOW %.2f)   CUR %s   (MAX %.2f)" % ( symbol, atr_band_lower, price_string, atr_band_higher ) )
             print('--------------------------------------------------------------------')
 
             time.sleep(2)

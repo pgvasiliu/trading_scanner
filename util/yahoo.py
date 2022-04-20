@@ -5,7 +5,9 @@ def download_yahoo ( symbol ):
 
     # Yahoo fix for '.' 
 
-    ticker = yf.Ticker( symbol.replace(".", "-") )
+    symbol = symbol.replace ( '.', '-' )
+
+    ticker = yf.Ticker( symbol )
 
     hist = ticker.history(period='1y', interval='1d')
 
@@ -21,3 +23,4 @@ def download_yahoo ( symbol ):
     #df['turnover'] = 0
     #return df
 
+#print ( download_yahoo ( 'BRK.B' ) )
