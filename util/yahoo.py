@@ -2,7 +2,10 @@ import yfinance as yf
 import pandas as pd
 
 def download_yahoo ( symbol ):
-    ticker = yf.Ticker( symbol )
+
+    # Yahoo fix for '.' 
+
+    ticker = yf.Ticker( symbol.replace(".", "-") )
 
     hist = ticker.history(period='1y', interval='1d')
 

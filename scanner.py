@@ -373,12 +373,12 @@ def main(x, upgrades):
 
             # Buy If price currently lower than MA substracts by ATR (with some multiplier)
             # To reduce the false signal, check the William %R value and should be on the oversold area and previously reach < -95
-            if ( ema_9 - ( 2 * atr_14) > _open ) and ( wpr < -80) and ( willr_141 < -95 ) and ( _close > _open ):
+            if ( ema_9 - ( 2 * atr_14) > _open ) and ( _wr < -80) and ( willr_141 < -95 ) and ( _close > _open ):
                 print ( "TV BUY" )
 
             # Sell If price currently higher than MA add by ATR (with some multiplier)
             # To reduce the false signal, check the William %R value and should be on the overbought area and previously reach > -5
-            if ( ema_9 + ( 2 * atr_14) < _close ) and ( wpr > -20 ) and ( willr_141 > -5 ):
+            if ( ema_9 + ( 2 * atr_14) < _close ) and ( _wr > -20 ) and ( willr_141 > -5 ):
                 print ( "TV SELL" )
 
 
