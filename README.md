@@ -52,6 +52,7 @@ $ pip3 install --user mplfinance mpl-finance
 - [x] Earnings date
 - [x] Fibonnacci levels
 - [ ] Volume logic
+- [ ] 1 year price target
 - [x] TEMA ( 30 ) indicator. TradingView does not return TEMA via the API so we are going to use yahoo to calculate tema.
 - [ ] Strategies and backtesting
 
