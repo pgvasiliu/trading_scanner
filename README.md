@@ -59,7 +59,7 @@ $ pip3 install --user mplfinance mpl-finance
 ## Example runs
 
 ```bash
-$ ./scanner.py config_tickers_canada.json
+$ ./scanner.py tickers/canada.json
 --------------------------------------------------------------------
    BCE       67.92        0.38    %  BUY                OSC:NEUTRAL|   mAVE:BUY                         OSC:  W%R BUY, MACD SELL,        []                
 -------------------------------------------------------------------
