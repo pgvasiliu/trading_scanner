@@ -96,6 +96,11 @@ def main(x, upgrades):
     buy_list, rsi_list, ema_list = ( [], [], [] )
     early_list = []
 
+    absolutepath  = os.path.abspath(__file__)
+    fileDirectory = os.path.dirname(absolutepath)
+    CONFIG_PATH   = os.path.dirname(fileDirectory) + '/config.json'
+
+    folder        = os.path.dirname(fileDirectory) + '/data'
 
     #today    = datetime.today()
     today     = time.strftime("%Y-%m-%d")
@@ -131,10 +136,10 @@ def main(x, upgrades):
     #    config = json.load(f)
     #    for key, value in config.items():
     #        os.environ[key] = str(value)
-    with open('config_settings.json') as json_file:
+    with open( CONFIG_PATH ) as json_file:
         config_settings = json.load(json_file)
 
-    folder = config_settings['data_folder']
+    #folder = config_settings['data_folder']
 
     tickers_exchange_json = {}
 

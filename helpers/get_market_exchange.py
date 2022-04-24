@@ -16,7 +16,11 @@ from colorama import Fore, Style
 
 
 def get_market_exchange(ticker):
-    with open('../config_settings.json') as json_file:
+    absolutepath = os.path.abspath(__file__)
+    fileDirectory = os.path.dirname(absolutepath)
+    CONFIG_PATH = os.path.dirname(fileDirectory) + '/' + 'config_settings.json'
+
+    with open(CONFIG_PATH) as json_file:
         json_data = json.load(json_file)
 
     headers = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'}
