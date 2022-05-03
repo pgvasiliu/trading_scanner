@@ -699,7 +699,7 @@ def main(x, upgrades):
 
             print ( "             SupRes   [%s] ---> %s" % ( symbol, sr ( symbol ) ) )
             print ( "             Fibona   [%s] ---> %s" % ( symbol, fibonacci ) )
-            print ( "             ATR_band [%s] ---> (LOW %.2f)   CUR %s   (MAX %.2f)" % ( symbol, atr_band_lower, price_string, atr_band_higher ) )
+            print ( "             ATR_band [%s] ---> (LOW %.2f, %.2f%% away )   CUR %s   (MAX %.2f, %.2f%% away)" % ( symbol, atr_band_lower, 100 - ( atr_band_lower * 100 / price ), price_string, atr_band_higher, 100 - ( price * 100 / atr_band_higher  ) ) )
             print('--------------------------------------------------------------------')
 
             time.sleep(2)
